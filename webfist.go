@@ -1,48 +1,27 @@
-package main
+// Package webfist implements WebFist verification.
+package webfist
 
 import (
-	"flag"
-	"log"
-	"net"
-	"net/http"
-	"time"
+	"fmt"
 
-	"github.com/bradfitz/go-smtpd/smtpd"
-	"github.com/bradfitz/runsit/listen"
+	"code.google.com/p/go.crypto/scrypt"
 )
 
-var (
-	webAddr  = listen.NewFlag("web", ":8080", "Web port")
-	smtpAddr = listen.NewFlag("smtp", ":2500", "SMTP port")
-)
-
-type server struct {
-	httpServer http.Server
-	smtpServer *smtpd.Server
+// CanonicalEmail returns the canonicalized version of the provided
+// email address.
+func CanonicalEmail(email string) string {
+	// TODO
+	return email
 }
 
-func (s *server) runSMTP(ln net.Listener) {
-	err := s.smtpServer.Serve(ln)
-	log.Fatalf("SMTP failure: %v", err)
-}
+var fistSalt = []byte("WebFist salt.")
 
-func main() {
-	flag.Parse()
-	webln, err := webAddr.Listen()
+// EmailKey returns the key used to store WebFist claims.
+func EmailKey(email string) string {
+	email = CanonicalEmail(email)
+	key, err := scrypt.Key([]byte(email), fistSalt, 16384 * 8, 8, 1, 32)
 	if err != nil {
-		log.Fatalf("web listen: %v", err)
+		panic(err)
 	}
-	smtpln, err := smtpAddr.Listen()
-	if err != nil {
-		log.Fatalf("SMTP listen: %v", err)
-	}
-
-	srv := &server{
-		smtpServer: &smtpd.Server{
-			ReadTimeout:  5 * time.Minute,
-			WriteTimeout: 5 * time.Minute,
-		},
-	}
-	go srv.runSMTP(smtpln)
-	log.Fatal(srv.httpServer.Serve(webln))
+	return fmt.Sprintf("%x", key)
 }
