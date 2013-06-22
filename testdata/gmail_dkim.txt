@@ -1,0 +1,49 @@
+Delivered-To: bslatkin@google.com
+Received: by 10.194.171.169 with SMTP id av9csp95301wjc;
+        Sat, 22 Jun 2013 10:45:00 -0700 (PDT)
+X-Received: by 10.52.94.142 with SMTP id dc14mr7066455vdb.86.1371923099705;
+        Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+Return-Path: <bslatkin@gmail.com>
+Received: from mail-ve0-x22a.google.com (mail-ve0-x22a.google.com [2607:f8b0:400c:c01::22a])
+        by mx.google.com with ESMTPS id kr7si3038551vec.75.2013.06.22.10.44.59
+        for <bslatkin@google.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::22a as permitted sender) client-ip=2607:f8b0:400c:c01::22a;
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::22a as permitted sender) smtp.mail=bslatkin@gmail.com;
+       dkim=pass header.i=@gmail.com
+Received: by mail-ve0-x22a.google.com with SMTP id 14so7519778vea.1
+        for <bslatkin@google.com>; Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to:content-type;
+        bh=73w7+sBlruX35di0wIGpacabgZC/OTSEgWKF+e0iz3o=;
+        b=DXRVj+DwUtaJleY+Z7NUl70+nP3SAptZS8VHCxWEnuK2VmhVZZwT7F7UrfpuKmAm+i
+         /GNHHzs6XXodu7CVmRfIjM3QAlxZgnI9kwbROgITdO/VZsXdoBI0icnSciNMtwsdeGja
+         ZzdOyLNiWKYFl1fzkZYMDEoi+8ZOQOrZ4i0Eg1+0XnOyNMpw+GEm1b3CxrysJPmFryzp
+         qhoSjm21E9csgQJGyeR9Vb4z0BouKUIhfAR50KQlxvQ7pW+fP4qpbBEgjC6xOiXVrHVX
+         ldJoVy0eJCKRTOrvmlu8AHXJl/OMxKDZNy+1bUWj/8usDNO6rgrsiL/e0GmQ5cI7QtcN
+         5WAA==
+MIME-Version: 1.0
+X-Received: by 10.58.85.134 with SMTP id h6mr8210008vez.18.1371923099288; Sat,
+ 22 Jun 2013 10:44:59 -0700 (PDT)
+Received: by 10.58.251.136 with HTTP; Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+Date: Sat, 22 Jun 2013 10:44:59 -0700
+Message-ID: <CAHi+7OBkCMXVnDek1ZaznyggOd2fp=GKe-oaj-RT7RbRRm7oRA@mail.gmail.com>
+Subject: Testing for the DKIM
+From: Brett Slatkin <bslatkin@gmail.com>
+To: Brett Slatkin <bslatkin@google.com>
+Content-Type: multipart/alternative; boundary=047d7b6d9340fe0dd104dfc1bc74
+
+--047d7b6d9340fe0dd104dfc1bc74
+Content-Type: text/plain; charset=ISO-8859-1
+
+
+
+--047d7b6d9340fe0dd104dfc1bc74
+Content-Type: text/html; charset=ISO-8859-1
+
+<div dir="ltr"><br></div>
+
+--047d7b6d9340fe0dd104dfc1bc74--

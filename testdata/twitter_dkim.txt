@@ -1,0 +1,496 @@
+
+Delivered-To: bslatkin@gmail.com
+Received: by 10.58.251.136 with SMTP id zk8csp108878vec;
+        Sat, 22 Jun 2013 10:23:01 -0700 (PDT)
+X-Received: by 10.180.205.200 with SMTP id li8mr2004089wic.15.1371921781381;
+        Sat, 22 Jun 2013 10:23:01 -0700 (PDT)
+Return-Path: <brett+caf_=bslatkin=gmail.com@haxor.com>
+Received: from mail-ve0-x229.google.com (mail-ve0-x229.google.com [2607:f8b0:400c:c01::229])
+        by mx.google.com with ESMTPS id gl9si1153805wic.3.2013.06.22.10.23.00
+        for <bslatkin@gmail.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Sat, 22 Jun 2013 10:23:01 -0700 (PDT)
+Received-SPF: neutral (google.com: 2607:f8b0:400c:c01::229 is neither permitted nor denied by best guess record for domain of brett+caf_=bslatkin=gmail.com@haxor.com) client-ip=2607:f8b0:400c:c01::229;
+Authentication-Results: mx.google.com;
+       spf=neutral (google.com: 2607:f8b0:400c:c01::229 is neither permitted nor denied by best guess record for domain of brett+caf_=bslatkin=gmail.com@haxor.com) smtp.mail=brett+caf_=bslatkin=gmail.com@haxor.com;
+       dkim=pass header.i=@twitter.com;
+       dmarc=pass (p=REJECT dis=NONE) d=postmaster.twitter.com
+Received: by mail-ve0-x229.google.com with SMTP id m1so7530078ves.28
+        for <bslatkin@gmail.com>; Sat, 22 Jun 2013 10:23:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=x-forwarded-to:x-forwarded-for:delivered-to:message-id
+         :dkim-signature:x-msfbl:date:from:to:subject:mime-version
+         :content-type:x-gm-message-state;
+        bh=ahVpnSUOblFmZGj1rFaHzQPqFcRa386FZ89sMjjl7w0=;
+        b=RQ+NlPOPKTMvHXQMmJS0bs48/5SfEcmF+5Q6ibGo3LbIpvMdLehdBZN7TMtkg7CC92
+         nSC5F5F4V+PxHZ2Snt/Cuglbvz2Ph8JD0aZxPFw1IRxN307B0kdL3RGaelNjzk4Hh2QL
+         IhUjF5F2cWysQXpqkBxAhmwagXc6ybm9AsnKvhFBWHrcB/L/XyoYhawtB4V2imP89XbG
+         0tO49j5AeO+Oasfg1jw82ghri82VXgq7XIgwr7p+nII79nYaNJ3w9m1ffQqywSvAZhFd
+         S05gOWkPBlCtv1SR3MySFFYJlO6hoz3IPLv7Rug0UrWpDWEZIGRKY1R3VIX4t43czI2m
+         E2sw==
+X-Received: by 10.220.7.134 with SMTP id d6mr8082838vcd.56.1371921780662;
+        Sat, 22 Jun 2013 10:23:00 -0700 (PDT)
+X-Forwarded-To: bslatkin@gmail.com
+X-Forwarded-For: brett@haxor.com bslatkin@gmail.com
+Delivered-To: brett+webfist@haxor.com
+Received: by 10.58.243.198 with SMTP id xa6csp71506vec;
+        Sat, 22 Jun 2013 10:23:00 -0700 (PDT)
+X-Received: by 10.236.198.206 with SMTP id v54mr9757165yhn.226.1371921780141;
+        Sat, 22 Jun 2013 10:23:00 -0700 (PDT)
+Return-Path: <z077e0c878oergg+jrosvfg=unkbe.pbz@bounce.twitter.com>
+Received: from spring-chicken-az.twitter.com (spring-chicken-az.twitter.com. [199.16.156.165])
+        by mx.google.com with ESMTP id l27si5730655yhm.70.2013.06.22.10.22.59
+        for <brett+webfist@haxor.com>;
+        Sat, 22 Jun 2013 10:23:00 -0700 (PDT)
+Received-SPF: pass (google.com: domain of z077e0c878oergg+jrosvfg=unkbe.pbz@bounce.twitter.com designates 199.16.156.165 as permitted sender) client-ip=199.16.156.165;
+Message-Id: <51c5dd74.a7b5ec0a.12f3.fffff525SMTPIN_ADDED_MISSING@mx.google.com>
+DKIM-Signature: v=1; a=rsa-sha1; d=twitter.com; s=dkim-201303; c=relaxed/relaxed;
+  q=dns/txt; i=@twitter.com; t=1371921779;
+  h=From:Subject:Date:To;
+  bh=KLyh4U2CsdVLGoKtohQAndfKVIM=;
+  b=l7UrnzHW8Eu49ObP79fqbXrfJSKkZEqW0FPjsW/Wmmxc9zlEU9YrENmiPU51Mo+v
+  TSJnBe/IIS8hUwfQP+5024i0KTtHobPM1PSZYhsCPha9IlHaZ8mJNlRJUVfK9z3/
+  pldHjRprxmYM8hbxJlAl89GfiqqoeFPI/aIxPjPEOvc=;
+X-MSFBL: YnJldHQrd2ViZmlzdEBoYXhvci5jb21AYXRsYS1hcWgtMzgtc3IxLUV2ZXJ5dGhp
+  bmcuMTg1QEV2ZXJ5dGhpbmdA
+Date: Sat, 22 Jun 2013 17:22:59 +0000
+From: "Elias Mogshack (Twitter)" <n-oergg+jrosvfg=unkbe.pbz-95bed@postmaster.twitter.com>
+To: WebFist <brett+webfist@haxor.com>
+Subject: Elias Mogshack (@EliasMogshack) mentioned you on Twitter!
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+  boundary="----=_Part_17886521_371525100.1371921779217"
+X-Gm-Message-State: ALoCoQkCeP19/+aXu67QRngaf1rFn9Qs5+Fqm4TL3A3InJOqRxWUtaQZ78sJpgl14H2GeXL7Xy37
+
+------=_Part_17886521_371525100.1371921779217
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Elias Mogshack @EliasMogshack
+@webfist beep
+09:22 AM - 22 Jun 13
+------------------------
+
+Keep the conversation going:
+Reply to @Elias Mogshack
+https://twitter.com/EliasMogshack/status/348491316075831296
+
+------------------------
+
+If you believe Elias Mogshack is engaging in abusive behavior on Twitter, you may report Elias Mogshack for spam: https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fuser_spam_reports%2FWebFist%2Freport%2FEliasMogshack%3Ft%3D1%26sig%3D36858a0325e44ca02bffacac5569c4afe618caf7%26iid%3Dc757f258-c99e-4fda-8538-8ed4beca4234%26uid%3D1539094274%26accused%3DEliasMogshack%26nid%3D4%2B694&sig=8bf22cf121a874b62e2428c9a055d0827e3f9e3b&uid=1539094274&iid=c757f258-c99e-4fda-8538-8ed4beca4234&nid=4+694&t=1
+Forgot your Twitter password? Get instructions on how to reset it:
+https://twitter.com/account/resend_password
+
+You can also unsubscribe from these emails or change your notification settings: https://twitter.com/i/u?t=1&sig=0e21c1493576ece531d4c73527ae4d078dae6866&iid=c757f258-c99e-4fda-8538-8ed4beca4234&uid=1539094274&nid=4+26
+https://twitter.com/settings/notifications
+
+Need help?
+https://support.twitter.com
+
+If you received this message in error and did not sign up for a Twitter account, click on the url below:
+https://twitter.com/account/not_my_account/WebFist/FD85B-C93A5-137192
+------=_Part_17886521_371525100.1371921779217
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<style type="text/css">
+@media only screen and (max-device-width: 480px) {
+table[class=outer] .global-width-670-to-320 {
+width: 320px !important;
+}
+table[class=outer] .global-width-520-to-320 {
+width: 320px !important;
+}
+table[class=outer] .global-width-500-to-300 {
+width: 300px !important;
+}
+table[class=outer] .global-separator-padding {
+height: 8px !important;
+}
+table[class=outer] .global-shrinking-to-0 {
+height: 0 !important;
+}
+table[class=outer] .global-shrinking-to-10 {
+height: 10px !important;
+}
+table[class=outer] .global-h1 {
+font-size: 14px !important;
+}
+
+table[class=outer] .cut {
+width: 0 !important;
+padding: 0 !important;
+}
+table[class=outer] .vcut {
+height: 0 !important;
+padding: 0 !important;
+}
+table[class=outer] img.cut {
+display: none !important;
+width: 0 !important;
+height: 0 !important;
+}
+table[class=outer] .cut span, table[class=outer] .cut a {
+display: none !important;
+}
+table[class=outer] .frame {
+width: 320px !important;
+border-left: 0 !important;
+border-right: 0 !important;
+}
+table[class=outer] .main_header.media_header {
+width: 300px !important;
+height: 55px !important;
+}
+table[class=outer] .header_left {
+height: 55px !important;
+}
+table[class=outer] .logo_header {
+height: 62px !important;
+}
+table[class=outer] .main_name {
+font-size: 12px !important;
+}
+table[class=outer] .subtitle {
+font-size: 12px !important;
+}
+table[class=outer] .media_main {
+width: 300px !important;
+}
+table[class=outer] .media_main .intro {
+width: 260px !important;
+font-size: 14px !important;
+}
+table[class=outer] .media_main .intro2 {
+font-size: 14px !important;
+}
+table[class=outer] .media_main .suggestions {
+font-size: 14px !important;
+}
+table[class=outer] .media_more {
+width: 300px !important;
+border-radius: 0 !important;
+background: #fff !important;
+border-top: 1px solid #e8e8e8 !important;
+}
+table[class=outer] .media_button {
+width: 300px !important;
+background-color: #209ae4 !important;
+padding-top: 3px !important;
+padding-bottom: 3px !important;
+}
+table[class=outer] .media_footer {
+font-size: 11px !important;
+line-height: 14px !important;
+padding: 0 10px !important;
+}
+table[class=outer] .address {
+font-size: 11px !important;
+line-height: 14px !important;
+display: block !important;
+}
+table[class=outer] td[class=footer-padding-top] {
+height: 12px !important;
+}
+table[class=outer] td[class=footer-padding-bottom] {
+height: 17px !important;
+}
+table[class=outer] .media_footer br {
+display: none !important;
+}
+table[class=outer] .spacer.ios {
+display: none !important;
+}
+table[class=outer] .reset {
+display: block !important;
+padding-bottom: 4px !important;
+}
+table[class=outer] .media_logo_div {
+display: block !important;
+position: absolute !important;
+left: 274px !important;
+top: 0 !important;
+background-image: url('https://ea.twimg.com/email/t1/ribbon.png') !important;
+background-size: 100% 100% !important;
+width: 36px !important;
+height: 68px !important;
+z-index: 1 !important;
+}
+table[class=employee-only-padding-top-bottom] {
+width: 300px !important;
+}
+table[class=employee-only] {
+width: 300px !important;
+padding: 10px 0;
+}
+td[class=header_padding] {
+height: 55px !important;
+}
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+table[class=outer] .media_button {
+padding-top: 3px !important;
+padding-bottom: 3px !important;
+background-color: #209ae4 !important;
+}
+table[class=outer] .media_button td.cut {
+width: 0 !important;
+padding: 0 !important;
+}
+table[class=outer] .media_button {
+padding-left: 10px !important;
+padding-right: 10px !important;
+}
+}
+</style>
+</head>
+<body style="margin: 0; padding: 0; background: #fff;-webkit-text-size-adjust:100%;">
+<span style="color: white; font-size: 1px; display: none;">@webfist beep - @EliasMogshack</span>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" class="outer" style="position:relative;background:#ddd;">
+<tbody>
+<tr>
+<td>
+<table class="inner frame" align="center" cellpadding="0" cellspacing="0" border="0" width="670" style="background:#fff;position:relative;border:0;border-left:1px solid #ccc;border-right:1px solid #ccc;">
+<tbody>
+<tr>
+<td> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%3Frefsrc%3Demail&amp;sig=76add118f9dfd33f63864ce34d9372e483cfba4a&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+21&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"><span class="media_logo_div"></span></a>
+<table cellpadding="0" cellspacing="0" border="0" width="670" class="header frame" style="background:#f2f2f2;table-layout:fixed;">
+<tbody>
+<tr>
+<td class="header_left cut" style="width:19px;height:77px;"> &nbsp; </td>
+<td height="94" width="46" valign="top" rowspan="2" class="logo_header cut" style="background:#fff;line-height:100%;"><a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%3Frefsrc%3Demail&amp;sig=76add118f9dfd33f63864ce34d9372e483cfba4a&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+21&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"><img class="logo cut" src="https://ea.twimg.com/email/t1/ribbon.png" width="46" height="94" style="border:0;line-height:100%;border:0;" /></a></td>
+<td class="cut" width="9"> &nbsp; </td>
+<td width="10" height="77" class="header_padding"> &nbsp; </td>
+<td width="458" height="77" class="main_header media_header" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;color:#333;">
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td class="main_name" style="font-size:14px;font-weight:bold;color:#000;"> <span dir="ltr">WebFist,</span> </td>
+</tr>
+<tr>
+<td class="subtitle" style="font-size:14px;color:#666;"> You were mentioned in a Tweet! </td>
+</tr>
+</tbody>
+</table> </td>
+<td width="10" height="77" class="header_padding"> &nbsp; </td>
+<td class="main_avatar cut" width="32" style="text-align:right;"> </td>
+<td class="col cut" style="width:85px;"></td>
+</tr>
+<tr>
+<td class="main header_drop cut" style="background:#fff;border-top:1px solid #ddd;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">&nbsp;</td>
+<td class="main header_drop cut" style="background:#fff;border-top:1px solid #ddd;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">&nbsp;</td>
+<td class="main header_drop media_header" height="17" style="background:#fff;border-top:1px solid #ddd;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;"><img width="1" height="1" style="display: block;border:0;" src="https://twitter.com/scribe/ibis?uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+20&amp;t=1" /></td>
+<td class="main header_drop cut" height="17" colspan="4" style="background:#fff;border-top:1px solid #ddd;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">&nbsp;</td>
+</tr>
+</tbody>
+</table> </td>
+<td rowspan="3"></td>
+</tr>
+<tr>
+<td class="content" style="background:#fff;">  <style type="text/css">
+@media only screen and (max-device-width: 480px) {
+table[class="main"] {
+width: 320px !important;
+}
+table[class="general-text-rules"] {
+width: 300px !important;
+}
+table[class="separator-padding"] {
+width: 320px !important;
+}
+table[class="separator-padding"] td {
+height: 8px !important;
+}
+hr[class="separator"] {
+width: 320px !important;
+}
+table[class="action"] {
+width: 300px !important;
+border-radius: 0 !important;
+background-color: #ffffff !important;
+}
+td[class="top-height"] {
+height: 8px !important;
+}
+td[class="tweet-action"] {
+line-height: 15px !important;
+}
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+td[class="tweet-action"] {
+line-height: 15px !important;
+}
+}
+</style>
+<table width="670" border="0" cellpadding="0" cellspacing="0" class="main frame" style="background:#fff;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<tbody>
+<tr>
+<td>
+<table width="520" border="0" align="center" cellpadding="0" cellspacing="0" class="general-text-rules" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;">
+<tbody>
+<tr>
+<td height="20" class="top-height" style="height:20px;"></td>
+</tr>
+<tr>
+<td>  <style type="text/css">
+@media only screen and (max-device-width: 480px) {
+table[class="big-tweet-template"] {
+width: 300px !important;
+}
+td[class="big-tweet-template-text"] {
+font-size: 18px !important;
+line-height: 22px !important;
+}
+td[class="big-tweet-template-user-info"] {
+width: 242px !important;
+}
+}
+</style>
+<table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="big-tweet-template" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;background-color:white;table-layout:fixed;">
+<tbody>
+<tr valign="top">
+<td rowspan="2" width="48" class="big-tweet-template-avatar" style="width:48px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2FEliasMogshack%2Fstatus%2F348491316075831296%3Frefsrc%3Demail&amp;sig=83261647d8b96c4c4931dc19b8a7f11dd17b33af&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+246&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"> <img width="48" height="48" src="https://si0.twimg.com/profile_images/1476322207/240px-JBrunnerQS_reasonably_small.jpg" alt="Elias Mogshack" style="border:0;width:48px;height:48px;border-radius:4px;" /> </a> </td>
+<td rowspan="2" width="10" class="big-tweet-template-avatar-padding"></td>
+<td height="24" valign="bottom" class="big-tweet-template-user-info" style="width:442px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2FEliasMogshack%2Fstatus%2F348491316075831296%3Frefsrc%3Demail&amp;sig=83261647d8b96c4c4931dc19b8a7f11dd17b33af&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+248&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"><span class="big-tweet-template-name" style="font-size:18px;font-weight:bold;color:#333;">Elias Mogshack</span></a> </td>
+</tr>
+<tr valign="top">
+<td height="24" class="big-template-tweet-user-info"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2FEliasMogshack%2Fstatus%2F348491316075831296%3Frefsrc%3Demail&amp;sig=83261647d8b96c4c4931dc19b8a7f11dd17b33af&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+247&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"> <span class="big-tweet-template-screen-name screen-name" style="direction:ltr;unicode-bidi:embed;font-size:14px;color:#999;">@EliasMogshack</span> </a> </td>
+</tr>
+<tr>
+<td height="10" colspan="3" class="big-tweet-template-padding"></td>
+</tr>
+<tr>
+<td colspan="3" class="big-tweet-template-text" dir="ltr" style="word-wrap:break-word;color:#333;font-size:22px;font-family:Georgia, 'Times New Roman', Times, serif;line-height:26px;"> <a class="screen-name" href="https://twitter.com/i/redirect?url=http%3A%2F%2Ftwitter.com%2FWebFist%3Frefsrc%3Demail&amp;sig=ceae7f02d7cbc1891e521b0305d03320bd5bb679&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+255&amp;t=1" style="direction:ltr;unicode-bidi:embed;border:none;color:#0084b4;text-decoration:none;">@WebFist</a> beep </td>
+</tr>
+<tr>
+<td height="4" colspan="3" class="big-tweet-template-padding"></td>
+</tr>
+<tr>
+<td colspan="3" class="big-tweet-template-date" style="font-size:12px;color:#bbb;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2FEliasMogshack%2Fstatus%2F348491316075831296%3Frefsrc%3Demail&amp;sig=83261647d8b96c4c4931dc19b8a7f11dd17b33af&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+251&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;color:#bbb;">09:22 AM - 22 Jun 13</a> </td>
+</tr>
+</tbody>
+</table>
+<table width="500" border="0" align="center" cellpadding="0" cellspacing="0" class="separator-padding">
+<tbody>
+<tr>
+<td width="500" height="12"></td>
+</tr>
+</tbody>
+</table>
+<hr class="separator" style="height:1px;border:0px;margin:0px;background-color:#e8e8e8;width:520px;" />
+<!-- -------------------- -->
+<table cellpadding="0" cellspacing="0" width="500" align="center" class="action">
+<tbody>
+<tr>
+<td height="12" colspan="2"></td>
+</tr>
+<tr>
+<td>
+<table cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td align="left">  <style type="text/css">
+@media only screen and (max-device-width: 480px) {
+table[class=button-template] {
+width: 130px !important;
+}
+tr[class=button-template-vertical-padding] {
+height: 3px !important;
+}
+table[class=button-template] .hide-mobile {
+display: none;
+}
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+td[class=button-template] {
+padding-left: 10px !important;
+padding-right: 10px !important;
+}
+}
+</style>
+<table cellpadding="0" cellspacing="0" border="0" class="button-template" style="background-image:url('https://ea.twimg.com/email/t1/button_bg_long.png');background-repeat:repeat-x;background-color:#33a9e5;border-radius:5px;height:28px;border:1px solid #28C;word-wrap:break-word;text-align:center;">
+<tbody>
+<tr>
+<td align="center" style="padding-left:15px;padding-right:15px;">
+<table cellpadding="0" cellspacing="0" border="0" class="button-template-inner">
+<tbody>
+<tr>
+<td style="padding-left:15px;padding-right:15px;padding-left:0px;padding-right:0px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fintent%2Ftweet%3Fin_reply_to%3D348491316075831296%26refsrc%3Demail&amp;sig=a20e5402db6ee230314c1d1008042863a70bd2e1&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+574&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;color:white;"> <img src="https://ea.twimg.com/email/t1/reply_arrow.png" alt="" style="border:0;" /> </a> </td>
+<td width="6" class="button-template-inner-vertical-padding" style="padding-left:15px;padding-right:15px;padding-left:0px;padding-right:0px;height:6px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fintent%2Ftweet%3Fin_reply_to%3D348491316075831296%26refsrc%3Demail&amp;sig=a20e5402db6ee230314c1d1008042863a70bd2e1&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+574&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;color:white;"> </a> </td>
+<td height="28" class="button-template-font" style="color:white;font-size:13px;font-weight:bold;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;padding-left:15px;padding-right:15px;padding-left:0px;padding-right:0px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fintent%2Ftweet%3Fin_reply_to%3D348491316075831296%26refsrc%3Demail&amp;sig=a20e5402db6ee230314c1d1008042863a70bd2e1&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+574&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;color:white;"> Reply<span class="hide-mobile"> to <span class="screen-name" style="direction:ltr;unicode-bidi:embed;">@EliasMogshack</span></span> </a> </td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+</tbody>
+</table> </td>
+<td class="tweet-action" style="font-size:12px;line-height:12px;padding-left:10px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fintent%2Fretweet%3Fea_u%3D1539094274%26ea_e%3D1373131379%26tweet_id%3D348491316075831296%26ea_s%3D6e0f7b2ebdea8c081c01b51e2cf594e2c75de993%26refsrc%3Demail&amp;sig=d68d0eb3cac3d66a2e97617d220934c9f3881020&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+575&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"><img src="https://ea.twimg.com/email/t1/actions/icon-blue-retweet.png" width="30" height="15" style="border:0;vertical-align:bottom;" />Retweet</a> </td>
+<td class="tweet-action" style="font-size:12px;line-height:12px;padding-left:10px;"> <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fintent%2Ffavorite%3Fea_u%3D1539094274%26ea_e%3D1373131379%26tweet_id%3D348491316075831296%26ea_s%3Df1e4bd045d3474a170eaf97e19a492de45fc2ae3%26refsrc%3Demail&amp;sig=ed5d4e17c03e142a88a6568fef75484f0888569f&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+576&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;"><img src="https://ea.twimg.com/email/t1/actions/icon-blue-favourite.png" width="21" height="15" style="border:0;vertical-align:bottom;" /> Favorite</a> </td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+<tr>
+<td height="12" colspan="2"></td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+<tr>
+<td>
+<table bgcolor="#eeeeee" border="0" cellpadding="0" cellspacing="0" width="670" class="frame footer" style="background-color:#eee;background-image:url('https://ea.twimg.com/email/t1/shadow-bottom.jpg');background-position:top;background-repeat:repeat-x;border-top-color:#ddd;border-top-style:solid;border-top-width:1px;">
+<tbody>
+<tr>
+<td colspan="4" height="16" class="footer-padding-top"></td>
+</tr>
+<tr>
+<td class="col cut" style="width:85px;"></td>
+<td class="footer_body media_footer" style="font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:12px;line-height:17px;color:#777;text-shadow:0 1px 0 #fff;">
+<div>
+<span class="reset"> If you believe Elias Mogshack is engaging in abusive behavior on Twitter, you may <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fuser_spam_reports%2FWebFist%2Freport%2FEliasMogshack%3Ft%3D1%26sig%3D36858a0325e44ca02bffacac5569c4afe618caf7%26iid%3Dc757f258-c99e-4fda-8538-8ed4beca4234%26uid%3D1539094274%26accused%3DEliasMogshack%26nid%3D4%2B694&amp;sig=8bf22cf121a874b62e2428c9a055d0827e3f9e3b&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+694&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;">report Elias Mogshack</a> for spam. </span> Forgot your Twitter password?
+<a class="reset" href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Faccount%2Fresend_password&amp;sig=f5d73c6d6c8577b4b95889880e513526930e35d0&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+24&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;">Get instructions on how to reset it.</a>
+</div>
+<div>
+You can also
+<a href="https://twitter.com/i/u?t=1&amp;sig=0e21c1493576ece531d4c73527ae4d078dae6866&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;uid=1539094274&amp;nid=4+26" style="border:none;color:#0084b4;text-decoration:none;">unsubscribe from these emails</a>
+<span class="reset">or change your <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Fsettings%2Fnotifications&amp;sig=dfe6fc4e06fdfbeffa510642835ff34af916458c&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+27&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;">notification settings</a>. Need <a href="https://twitter.com/i/redirect?url=https%3A%2F%2Fsupport.twitter.com&amp;sig=d5a93ec8dc3f5086b47a0022aac6b1bd71661580&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+97&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;">help</a>?</span>
+</div>
+<div class="reset">
+If you received this message in error and did not sign up for Twitter, click
+<a href="https://twitter.com/i/redirect?url=https%3A%2F%2Ftwitter.com%2Faccount%2Fnot_my_account%2FWebFist%2FFD85B-C93A5-137192&amp;sig=c8827d24e6257ebe7d999c47dc6d02d241412857&amp;uid=1539094274&amp;iid=c757f258-c99e-4fda-8538-8ed4beca4234&amp;nid=4+25&amp;t=1" style="border:none;color:#0084b4;text-decoration:none;">not my account</a>.
+</div>
+<div>
+<a href="#" class="address" style="border:none;color:#0084b4;text-decoration:none;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-decoration:none;font-size:11px;line-height:17px;color:#999999;text-shadow:0 1px 0 #fff;">Twitter, Inc. 1355 Market St., Suite 900 <span class="nobreak" style="white-space:nowrap;">San Francisco, CA 94103 </span></a>
+</div> </td>
+<td class="col cut" style="width:85px;"></td>
+</tr>
+<tr>
+<td colspan="3" class="footer-padding-bottom" height="25"></td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+</tbody>
+</table> </td>
+</tr>
+</tbody>
+</table>
+<img width="1" height="1" src="loadimage" style="border:0;" />
+</body>
+</html>
+
+------=_Part_17886521_371525100.1371921779217--
