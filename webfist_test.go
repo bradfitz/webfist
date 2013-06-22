@@ -7,7 +7,7 @@ import (
 )
 
 func TestEmailKey(t *testing.T) {
-	key := NewEmail("brad@danga.com").HexKey()
+	key := NewEmailAddr("brad@danga.com").HexKey()
 	if want := "f888951d2ddcad78ffebce4a2c3158ecd1a60db0811a924ae7f41204828937c3"; key != want {
 		t.Errorf("key = %q; want %q", key, want)
 	}
@@ -15,7 +15,7 @@ func TestEmailKey(t *testing.T) {
 
 func TestEncrypt(t *testing.T) {
 	const msg = "From: foo\r\nTo: bar\r\n"
-	email := NewEmail("brad@danga.com")
+	email := NewEmailAddr("brad@danga.com")
 
 	var encBuf bytes.Buffer
 	enc := email.Encrypter(&encBuf)

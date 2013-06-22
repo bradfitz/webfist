@@ -13,44 +13,48 @@ import (
 	"code.google.com/p/go.crypto/scrypt"
 )
 
+// MaxEmailSize is the maxium size of an RFC 822 email, including
+// both its headers and body.
+const MaxEmailSize = 16 << 10
+
 var (
 	dummyIV  = make([]byte, 16) // all zeros
 	fistSalt = []byte("WebFist salt.")
 )
 
-// Email provides utility functions on a wrapped email address.
-type Email struct {
+// EmailAddr provides utility functions on a wrapped email address.
+type EmailAddr struct {
 	email string // canonical
 
 	keyOnce sync.Once
 	lazyKey []byte // scrypt
 }
 
-// NewEmail returns a Email wrapper around an email address string.
+// NewEmailAddr returns a EmailAddr wrapper around an email address string.
 // The incoming email address does not need to be canonicalized.
-func NewEmail(email string) *Email {
-	return &Email{
-		email: canonicalEmail(email),
+func NewEmailAddr(addr string) *EmailAddr {
+	return &EmailAddr{
+		email: canonicalEmail(addr),
 	}
 }
 
 // Canonical returns the canonical version of the email address.
-func (e *Email) Canonical() string {
+func (e *EmailAddr) Canonical() string {
 	return e.email
 }
 
 // HexKey returns the human-readable, lowercase hex version of
 // the email address's key.
-func (e *Email) HexKey() string {
+func (e *EmailAddr) HexKey() string {
 	return fmt.Sprintf("%x", e.getKey())
 }
 
-func (e *Email) getKey() []byte {
+func (e *EmailAddr) getKey() []byte {
 	e.keyOnce.Do(e.initLazyKey)
 	return e.lazyKey
 }
 
-func (e *Email) initLazyKey() {
+func (e *EmailAddr) initLazyKey() {
 	key, err := scrypt.Key([]byte(e.Canonical()), fistSalt, 16384*8, 8, 1, 32)
 	if err != nil {
 		panic(err)
@@ -58,7 +62,7 @@ func (e *Email) initLazyKey() {
 	e.lazyKey = key
 }
 
-func (e *Email) block() cipher.Block {
+func (e *EmailAddr) block() cipher.Block {
 	block, err := aes.NewCipher(e.encryptionKey())
 	if err != nil {
 		panic(err)
@@ -67,7 +71,7 @@ func (e *Email) block() cipher.Block {
 }
 
 // encryptionKey returns the AES-128 key for this email address.
-func (e *Email) encryptionKey() []byte {
+func (e *EmailAddr) encryptionKey() []byte {
 	s1 := sha1.New()
 	io.WriteString(s1, e.email)
 	s1.Write(e.getKey())
@@ -81,14 +85,14 @@ func canonicalEmail(email string) string {
 	return email
 }
 
-func (e *Email) Encrypter(w io.Writer) io.Writer {
+func (e *EmailAddr) Encrypter(w io.Writer) io.Writer {
 	return cipher.StreamWriter{
 		S: cipher.NewCTR(e.block(), dummyIV),
 		W: w,
 	}
 }
 
-func (e *Email) Decrypter(r io.Reader) io.Reader {
+func (e *EmailAddr) Decrypter(r io.Reader) io.Reader {
 	return cipher.StreamReader{
 		S: cipher.NewCTR(e.block(), dummyIV),
 		R: r,
