@@ -43,6 +43,7 @@ func main() {
 			WriteTimeout: 5 * time.Minute,
 		},
 	}
+	log.Printf("Started: webserver %s, SMTP %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 	log.Fatal(srv.httpServer.Serve(webln))
 }
