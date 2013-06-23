@@ -7,12 +7,13 @@ import (
 	"log"
 	"net/mail"
 	"os/exec"
+	"strings"
 	"sync"
 )
 
 // MaxEmailSize is the maxium size of an RFC 822 email, including
 // both its headers and body.
-const MaxEmailSize = 16 << 10
+const MaxEmailSize = 64 << 10
 
 // Email wraps a signed email.
 type Email struct {
@@ -50,7 +51,7 @@ func (e *Email) Verify() bool {
 	cmd := exec.Command(dkimVerifyPath)
 	cmd.Stdin = bytes.NewReader(e.all)
 	out, err := cmd.CombinedOutput()
-	if err == nil && string(out) == "signature ok" {
+	if err == nil && strings.TrimSpace(string(out)) == "signature ok" {
 		return true
 	}
 	return false
