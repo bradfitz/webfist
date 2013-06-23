@@ -1,1 +1,23 @@
-TBA
+WebFist implements WebFinger delegation for providers who don't
+support WebFinger natively.
+
+It takes advantage of the fact that all major providers DKIM-sign
+their outgoing emails.
+
+So if you have a Gmail, Facebook, Yahoo, Outlook, or whatever account,
+you can email a server in the WebFist pool of servers, the server will
+DKIM-verify it, parse it for a WebFinger delegation command, and then
+encrypt your original email (with your email address as the key) and
+then replicate the encrypted data across the network of WebFist servers.
+
+Each WebFist node is then also a WebFinger server, so you can do
+WebFinger lookups on gmail or facebook email addresses.
+
+Consider it a WebFinger fallback.
+
+One node is currently running at http://webfinger.org/
+
+The plan is to have a big pool of WebFist servers, like NTP pools.
+
+Written by Brad Fitzpatrick and Brett Slatkin at IndieWebCamp in
+Portland on 2013-06-23.
