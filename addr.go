@@ -41,7 +41,7 @@ func (e *EmailAddr) Canonical() string {
 // HexKey returns the human-readable, lowercase hex version of
 // the email address's key.
 func (e *EmailAddr) HexKey() string {
-	return fmt.Sprintf("%x", e.getKey())
+	return fmt.Sprintf("%x", e.getKey()[:20])
 }
 
 func (e *EmailAddr) getKey() []byte {
