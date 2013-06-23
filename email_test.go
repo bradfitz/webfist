@@ -34,5 +34,11 @@ func TestEmailVerify(t *testing.T) {
 		if !e.Verify() {
 			t.Errorf("%s didn't verify", file)
 		}
+		ea, err := e.From()
+		if err != nil {
+			t.Errorf("%s From error = %v", file, err)
+		} else {
+			t.Logf("%s From = %v", file, ea.Canonical())
+		}
 	}
 }

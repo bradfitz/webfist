@@ -57,6 +57,14 @@ func (e *Email) Verify() bool {
 	return false
 }
 
+func (e *Email) From() (*EmailAddr, error) {
+	mailAddr, err := mail.ParseAddress(e.msg.Header.Get("From"))
+	if err != nil {
+		return nil, err
+	}
+	return NewEmailAddr(mailAddr.Address), nil
+}
+
 var (
 	dkimVerifyOnce sync.Once
 	dkimVerifyPath string
