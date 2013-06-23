@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
@@ -17,7 +18,8 @@ var (
 	webAddr     = listen.NewFlag("web", ":8080", "Web port")
 	smtpAddr    = listen.NewFlag("smtp", ":2500", "SMTP port")
 	storageRoot = flag.String("root", "", "Root for local disk storage")
-	baseURL 	= flag.String("base", "http://webfist.org", "Base URL without trailing slash for all server-side generated URLs.")
+	baseURL     = flag.String("base", "http://webfist.org", "Base URL without trailing slash for all server-side generated URLs.")
+	peers       = flag.String("peers", "", "Comma-separated list of hosts to replicate from.")
 )
 
 type server struct {
@@ -25,6 +27,7 @@ type server struct {
 	smtpServer *smtpd.Server
 	lookup     webfist.Lookup
 	storage    webfist.Storage
+	peers      []string // hosts
 }
 
 func main() {
@@ -58,6 +61,10 @@ func main() {
 		storage: storage,
 		lookup:  NewLookup(storage),
 	}
+	if *peers != "" {
+		srv.peers = strings.Split(*peers, ",")
+	}
+	go srv.syncFromPeers()
 	srv.initSMTPServer()
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
