@@ -51,8 +51,8 @@ owns an email address) is invalid or missing.</p>
 <p>Send email to <a href="mailto:fist@webfist.org">fist@webfist.org</a>
 to set your WebFinger delegation. The email must be DKIM-signed. You will not
 receive a response email. The contents of the email should be like this. The URL
-you point to should be a <a href="http://tools.ietf.org/html /draft-ietf-
-appsawg-webfinger">JRD document</a> defined by the WebFinger spec.</p>
+you point to should be a <a href="http://tools.ietf.org/html/draft-ietf-appsawg-webfinger">JRD document</a>
+defined by the WebFinger spec.</p>
 <br>
 <code>webfist = http://example.com/path/to/your-profile</code>
 <br>
