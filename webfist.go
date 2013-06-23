@@ -23,6 +23,8 @@ type Storage interface {
 	// os.ErrNotExist if the file is doesn't exist.
 	EncryptedEmail(addrKey, sha1 string) ([]byte, error)
 
+	PutEncryptedEmail(addrKey, sha1 string, data []byte) error
+
 	// RecentMeta returns the recently-received encrypted emails.
 	RecentMeta() ([]*RecentMeta, error)
 }

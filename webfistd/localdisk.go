@@ -136,6 +136,19 @@ func (s *diskStorage) EncryptedEmail(addrKey, encSHA1 string) ([]byte, error) {
 	return ioutil.ReadFile(path)
 }
 
+func (s *diskStorage) PutEncryptedEmail(addrKey, encSHA1 string, data []byte) error {
+	s1 := sha1.New()
+	s1.Write(data)
+	if fmt.Sprintf("%x", s1.Sum(nil)) != encSHA1 {
+		return errInvalidBlobref
+	}
+	emailPath := filepath.Join(s.emailRootFromHex(addrKey), encSHA1)
+	if err := ioutil.WriteFile(emailPath, data, 0644); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) error {
 	emailRoot := s.emailRoot(addr)
 	err := os.MkdirAll(emailRoot, 0755)

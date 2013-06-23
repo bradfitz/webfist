@@ -44,6 +44,8 @@ func (l *DummyStorage) EncryptedEmail(addrKey, sha1 string) ([]byte, error) {
 	panic("Not implemented")
 }
 
+
+
 var (
 	testServer *server
 )
