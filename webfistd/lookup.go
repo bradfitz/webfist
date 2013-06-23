@@ -9,14 +9,6 @@ import (
   "github.com/bradfitz/webfist"
 )
 
-func init() {
-  Foo()
-}
-
-func Foo() {
-  log.Printf("Hi")
-}
-
 func (s *server) HandleLookup(w http.ResponseWriter, r *http.Request) {
   if r.ParseForm() != nil {
     http.Error(w, "Bad request", http.StatusBadRequest)
@@ -33,20 +25,37 @@ func (s *server) HandleLookup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  emailAddr := NewEmailAddr(resource)
-  foundData := s.Get(emailAddr)
+  emailAddr := webfist.NewEmailAddr(resource)
+  foundData := s.storage.WebFinger(emailAddr)
   if foundData == nil {
-    log.Printf("Not found: %s", emailAddr.email)
+    log.Printf("Not found: %s", emailAddr.Canonical())
     http.NotFound(w, r)
     return
   }
   b, err := json.Marshal(foundData.JSON)
   if err != nil {
-    log.Printf("Bad data for resource: %s -- %v", emailAddr.email, err)
+    log.Printf("Bad data for resource: %s -- %v", emailAddr.Canonical(), err)
     http.Error(w, "Bad data", http.StatusInternalServerError)
     return
   }
 
-  log.Printf("Found user %s -- %v", emailAddr.email, foundData.JSON)
+  log.Printf("Found user %s -- %v", emailAddr.Canonical(), foundData.JSON)
   w.Write(b)
+}
+
+// TODO: Move this somewhere else
+type Dummy struct {}
+
+func (l *Dummy) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
+  return nil
+}
+
+func (l *Dummy) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
+  return nil, nil
+}
+
+func (l *Dummy) WebFinger(emailAddr *webfist.EmailAddr) (r *webfist.WebFingerResponse) {
+  r = &webfist.WebFingerResponse{JSON: make(map[string]interface{})}
+  r.JSON["hi"] = "meep";
+  return r;
 }

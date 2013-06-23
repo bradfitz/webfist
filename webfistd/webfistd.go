@@ -20,6 +20,11 @@ type server struct {
 	smtpServer *smtpd.Server
 }
 
+func (s *server) runSMTP(ln net.Listener) {
+	err := s.smtpServer.Serve(ln)
+	log.Fatalf("SMTP failure: %v", err)
+}
+
 func main() {
 	flag.Parse()
 	webln, err := webAddr.Listen()
@@ -41,7 +46,6 @@ func main() {
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	// http.HandleFunc("/.well-known/webfinger", srv.HandleLookup)
-
+	http.HandleFunc("/.well-known/webfinger", srv.HandleLookup)
 	log.Fatal(srv.httpServer.Serve(webln))
 }
