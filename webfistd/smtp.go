@@ -80,14 +80,24 @@ func (e *env) Write(line []byte) error {
 }
 
 func (e *env) Close() error {
-	email, err := webfist.NewEmail(e.buf.Bytes())
+	em, err := webfist.NewEmail(e.buf.Bytes())
 	if err != nil {
 		return err
 	}
-	verified := email.Verify()
+	verified := em.Verify()
 	log.Printf("email from %v; verified = %v", e.from.Canonical(), verified)
 	if !verified {
 		return errors.New("DKIM verification failed")
 	}
-	return nil
+
+	_, err = em.Assignments()
+	if err != nil {
+		return errors.New("Invalid or missing WebFist commands in email.")
+	}
+	from, err := em.From()
+	if err != nil {
+		return errors.New("Bogus From header")
+	}
+
+	return e.s.storage.PutEmail(from, em)
 }
