@@ -4,10 +4,10 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
-	// "github.com/bradfitz/webfist"
 )
 
 var (
@@ -18,11 +18,6 @@ var (
 type server struct {
 	httpServer http.Server
 	smtpServer *smtpd.Server
-}
-
-func (s *server) runSMTP(ln net.Listener) {
-	err := s.smtpServer.Serve(ln)
-	log.Fatalf("SMTP failure: %v", err)
 }
 
 func main() {
