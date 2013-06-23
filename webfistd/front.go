@@ -26,7 +26,7 @@ func front(w http.ResponseWriter, r *http.Request) {
 		}
 		p {
 			width: 580px;
-			margin: 1.5em 0;
+			margin: 1em 0;
 		}
 		.container {
 			width: 600px;
@@ -34,8 +34,9 @@ func front(w http.ResponseWriter, r *http.Request) {
 		}
 		code {
 			background-color: #eee;
-			border: 1px solid black;
-			padding: 4px;
+			border: 2px solid #ccc;
+			padding: 8px;
+			border-radius: 4px;
 		}
 	</style>
 </head>
@@ -47,10 +48,10 @@ href="https://github.com/bradfitz/webfist">github.com/bradfitz/webfist</a>. You
 can run your own WebFist server and join the fist-bump network.</p>
 <p>Send email to <a href="mailto:fist@webfist.org">fist@webfist.org</a>
 to set your WebFinger delegation. The email must be DKIM-signed. You will not receive
-a response email. The contents of the email should be:</p>
-<p>
+a response email. The contents of the email should be like:</p>
+<br>
 <code>webfist = http://example.com/path/to/your-profile</code>
-</p>
+<br>
 <br>
 <p>Or, send yourself an email and paste the full email headers and body
 here:</p>
