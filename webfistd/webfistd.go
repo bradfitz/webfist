@@ -60,7 +60,9 @@ func main() {
 	srv := &server{
 		storage: storage,
 		lookup:  NewLookup(storage),
-		peers:   strings.Split(*peers, ","),
+	}
+	if *peers != "" {
+		srv.peers = strings.Split(*peers, ",")
 	}
 	go srv.syncFromPeers()
 	srv.initSMTPServer()
