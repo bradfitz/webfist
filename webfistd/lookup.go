@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 
@@ -90,7 +91,7 @@ func (l *emailLookup) WebFinger(addr string) (*webfist.WebFingerResponse, error)
 	lastEmail := emailList[len(emailList) - 1]
 	// TODO: Garbage collect old emails
 
-	url, err := lastEmail.WebFist()
+	delegationURL, err := lastEmail.WebFist()
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +99,14 @@ func (l *emailLookup) WebFinger(addr string) (*webfist.WebFingerResponse, error)
 	if err != nil {
 		return nil, err
 	}
-	proofURL := fmt.Sprintf("%s/webfist/proof/%s-%s", *baseURL, emailAddr.HexKey(), encSHA1)
+	proofURL := fmt.Sprintf("%s/webfist/proof/%s-%s?decrypt=%s", *baseURL, emailAddr.HexKey(), encSHA1, url.QueryEscape(emailAddr.Canonical()))
 
 	resp := &webfist.WebFingerResponse {
 		Subject: emailAddr.Canonical(),
 		Links: []webfist.Link {
 			{
 				Rel: "http://webfist.org/spec/rel",
-				Href: url,
+				Href: delegationURL,
 				Properties: map[string]string {
 					"http://webfist.org/spec/proof": proofURL,
 				},
