@@ -15,7 +15,7 @@ WebFinger lookups on gmail or facebook email addresses.
 
 Consider it a WebFinger fallback.
 
-One node is currently running at http://webfinger.org/
+One node is currently running at http://webfist.org/
 
 The plan is to have a big pool of WebFist servers, like NTP pools.
 
