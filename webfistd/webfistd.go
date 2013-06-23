@@ -7,7 +7,6 @@ import (
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
-	"github.com/bradfitz/webfist"
 )
 
 var (
@@ -36,10 +35,11 @@ func main() {
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	lookupServer := &webfist.Server{
-		Lookup: &webfist.Dummy{},
-	}
+	// TODO: Actually hook up the lookup
+	// lookup := &lookupHandler {
+	// 	lookup: NewLookup(&DummyStorage{}),
+	// }
+	// http.Handle("/.well-known/webfinger", lookup)
 
-	http.HandleFunc("/.well-known/webfinger", lookupServer.HandleLookup)
 	log.Fatal(srv.httpServer.Serve(webln))
 }
