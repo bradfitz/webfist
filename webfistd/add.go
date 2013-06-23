@@ -30,9 +30,9 @@ func (s *server) WebFormAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	am, err := em.Assignments()
+	webfist, err := em.WebFist()
 	if err != nil {
-		http.Error(w, "Email didn't contain WebFist commands: " + err.Error(), 400)
+		http.Error(w, "Email didn't contain WebFist command: " + err.Error(), 400)
 		return
 	}
 
@@ -41,5 +41,5 @@ func (s *server) WebFormAdd(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Storage error: " + err.Error(), 500)
 		return
 	}
-	fmt.Fprintf(w, "Saved. Extracted email = %#v", am)
+	fmt.Fprintf(w, "Saved. Extracted email = %#v", webfist)
 }

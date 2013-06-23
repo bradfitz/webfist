@@ -90,7 +90,7 @@ func (e *env) Close() error {
 		return errors.New("DKIM verification failed")
 	}
 
-	_, err = em.Assignments()
+	_, err = em.WebFist()
 	if err != nil {
 		return errors.New("Invalid or missing WebFist commands in email.")
 	}

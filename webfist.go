@@ -20,10 +20,20 @@ type Storage interface {
 	EncryptedEmail(addrKey, sha1 string) ([]byte, error)
 }
 
-// Payload from: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
-// TODO: Make this type pretty and more native, not just a bag of properties.
+// Defined in: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
+type Link struct {
+	Rel string `json:"rel"`
+	Type string `json:"type,omitempty"`
+	Href string `json:"href"`
+	Titles []string `json:"titles,omitempty"`
+	Properties map[string]string `json:"properties,omitempty"`
+}
+
 type WebFingerResponse struct {
-  JSON map[string]interface{}
+	Subject string `json:"subject"`
+	Aliases []string `json:"aliases,omitempty"`
+	Properties map[string]string `json:"properties,omitempty"`
+	Links []Link `json:"links,omitempty"`
 }
 
 // Lookup performs a WebFinger query for an email address and returns all known
@@ -31,5 +41,5 @@ type WebFingerResponse struct {
 // the network, fallback to using the WebFist network, or use local storage to
 // map email address to WebFinger response.
 type Lookup interface {
-  WebFinger(emailAddr string) (*WebFingerResponse, error)
+	WebFinger(string) (*WebFingerResponse, error)
 }
