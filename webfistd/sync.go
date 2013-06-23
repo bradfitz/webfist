@@ -17,11 +17,14 @@ func (s *server) syncFromPeers() {
 }
 
 func (srv *server) syncFromPeer(host string) {
+	log.Printf("Starting sync from %v", host)
 	var ims time.Time
 	var sleep time.Duration
 	for {
 		time.Sleep(sleep)
-		req, err := http.NewRequest("GET", "http://"+host+"/webfist/bump", nil)
+		url := "http://"+host+"/webfist/bump"
+		log.Printf("Doing request to %v", url)
+		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
 			panic("Bogus host: " + host + ": " + err.Error())
 		}
@@ -67,6 +70,7 @@ func (srv *server) syncFromPeer(host string) {
 					log.Printf("Error storing fetched %s-%s: %v", addrHexKey, encSHA1, err)
 					continue
 				}
+				log.Printf("Synced %s-%s from %s", addrHexKey, encSHA1, host)
 			}
 		}
 		if err := sc.Err(); err != nil {
