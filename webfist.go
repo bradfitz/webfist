@@ -5,6 +5,17 @@ package webfist
 type Storage interface {
 	PutEmail(*EmailAddr, *Email) error
 	Emails(*EmailAddr) ([]*Email, error)
+
+	// StatEncryptedBlob returns the size of the encrypted blob on
+	// disk. sha1 is lowercase hex. The err will be os.ErrNotExist
+	// if the file is doesn't exist.
+	StatEncryptedEmail(sha1 string) (size int, err error)
+
+	// EncryptedEmail returns the encrypted email with
+	// the the encrypted digest of sha1 (lowercase hex).
+	// The err will be os.ErrNotExist if the file is doesn't
+	// exist.
+	EncryptedEmail(sha1 string) ([]byte, error)
 }
 
 // Payload from: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
