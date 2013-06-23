@@ -2,7 +2,9 @@ package webfist
 
 import (
 	"bytes"
+	"crypto/sha1"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -11,6 +13,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MaxEmailSize is the maxium size of an RFC 822 email, including
@@ -22,6 +25,8 @@ type Email struct {
 	all  []byte
 	msg  *mail.Message
 	body []byte
+
+	encSHA1 string // Lazy
 }
 
 // NewEmail parses all as an email and returns a wrapper around it.
@@ -70,6 +75,37 @@ func (e *Email) From() (*EmailAddr, error) {
 		return nil, err
 	}
 	return NewEmailAddr(mailAddr.Address), nil
+}
+
+func (e *Email) Date() (time.Time, error) {
+	t, err := e.msg.Header.Date()
+	if err != nil {
+		return time.Time{}, err
+	}
+	return t, nil
+}
+
+// EncSHA1 returns a lowercase SHA1 hex of the encrypted email.
+func (e *Email) EncSHA1() (string, error) {
+	if e.encSHA1 != "" {
+		return e.encSHA1, nil
+	}
+	r, err := e.Encrypted()
+	if err != nil {
+		return "", err
+	}
+	s1 := sha1.New()
+	_, err = io.Copy(s1, r)
+	if err != nil {
+		return "", nil
+	}
+
+	e.encSHA1 = fmt.Sprintf("%x", s1.Sum(nil))
+	return e.encSHA1, nil
+}
+
+func (e *Email) SetEncSHA1(x string) {
+	e.encSHA1 = x
 }
 
 func (e *Email) Encrypted() (io.Reader, error) {

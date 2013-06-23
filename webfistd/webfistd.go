@@ -17,6 +17,7 @@ var (
 	webAddr     = listen.NewFlag("web", ":8080", "Web port")
 	smtpAddr    = listen.NewFlag("smtp", ":2500", "SMTP port")
 	storageRoot = flag.String("root", "", "Root for local disk storage")
+	baseURL 	= flag.String("base", "http://webfist.org", "Base URL without trailing slash for all server-side generated URLs.")
 )
 
 type server struct {

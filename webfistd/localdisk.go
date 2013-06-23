@@ -157,6 +157,7 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 
 	addrKey := addr.HexKey()
 	encSHA1 := fmt.Sprintf("%x", s1.Sum(nil))
+	email.SetEncSHA1(encSHA1)
 
 	emailPath := filepath.Join(emailRoot, encSHA1)
 	if err := ioutil.WriteFile(emailPath, enc, 0644); err != nil {
