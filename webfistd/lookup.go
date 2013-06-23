@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/bradfitz/webfist"
@@ -52,6 +53,29 @@ type emailLookup struct {
 	storage webfist.Storage
 }
 
+type byEmailDate []*webfist.Email
+
+
+func (s byEmailDate) Len() int {
+	return len(s)
+}
+
+func (s byEmailDate) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s byEmailDate) Less(i, j int) bool {
+	d1, err := s[i].Date()
+	if err != nil {
+		return false
+	}
+	d2, err := s[j].Date()
+	if err != nil {
+		return false
+	}
+	return d1.Before(d2)
+}
+
 func (l *emailLookup) WebFinger(addr string) (*webfist.WebFingerResponse, error) {
 	emailAddr := webfist.NewEmailAddr(addr)
 	emailList, err := l.storage.Emails(emailAddr)
@@ -61,8 +85,9 @@ func (l *emailLookup) WebFinger(addr string) (*webfist.WebFingerResponse, error)
 	if len(emailList) == 0 {
 		return nil, nil
 	}
-	// TODO: Sort the emails by time. Take the most recent one.
+	sort.Sort(byEmailDate(emailList))
 	lastEmail := emailList[len(emailList) - 1]
+	// TODO: Garbage collect old emails
 
 	url, err := lastEmail.WebFist()
 	if err != nil {

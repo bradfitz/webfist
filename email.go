@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MaxEmailSize is the maxium size of an RFC 822 email, including
@@ -70,6 +71,14 @@ func (e *Email) From() (*EmailAddr, error) {
 		return nil, err
 	}
 	return NewEmailAddr(mailAddr.Address), nil
+}
+
+func (e *Email) Date() (time.Time, error) {
+	t, err := e.msg.Header.Date()
+	if err != nil {
+		return time.Time{}, err
+	}
+	return t, nil
 }
 
 func (e *Email) Encrypted() (io.Reader, error) {
