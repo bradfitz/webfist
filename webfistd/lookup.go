@@ -26,7 +26,7 @@ func (s *server) HandleLookup(w http.ResponseWriter, r *http.Request) {
   }
 
   emailAddr := webfist.NewEmailAddr(resource)
-  foundData := s.storage.WebFinger(emailAddr)
+  foundData := s.lookup.WebFinger(emailAddr)
   if foundData == nil {
     log.Printf("Not found: %s", emailAddr.Canonical())
     http.NotFound(w, r)
@@ -43,19 +43,18 @@ func (s *server) HandleLookup(w http.ResponseWriter, r *http.Request) {
   w.Write(b)
 }
 
-// TODO: Move this somewhere else
-type Dummy struct {}
-
-func (l *Dummy) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
-  return nil
+type emailLookup struct {
+  storage webfist.Storage
 }
 
-func (l *Dummy) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
-  return nil, nil
+func (l *emailLookup) WebFinger(emailAddr *webfist.EmailAddr) *webfist.WebFingerResponse {
+  resp := &webfist.WebFingerResponse{JSON: make(map[string]interface{})}
+  resp.JSON["hi"] = "meep";
+  return resp;
 }
 
-func (l *Dummy) WebFinger(emailAddr *webfist.EmailAddr) (r *webfist.WebFingerResponse) {
-  r = &webfist.WebFingerResponse{JSON: make(map[string]interface{})}
-  r.JSON["hi"] = "meep";
-  return r;
+func NewLookup(storage webfist.Storage) webfist.Lookup {
+  return &emailLookup{
+    storage: storage,
+  }
 }

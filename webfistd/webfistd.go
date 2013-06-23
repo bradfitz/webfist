@@ -18,11 +18,23 @@ var (
 type server struct {
 	httpServer http.Server
 	smtpServer *smtpd.Server
+	lookup webfist.Lookup
 }
 
 func (s *server) runSMTP(ln net.Listener) {
 	err := s.smtpServer.Serve(ln)
 	log.Fatalf("SMTP failure: %v", err)
+}
+
+// TODO: Move this somewhere else
+type DummyStorage struct {}
+
+func (l DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
+  return nil
+}
+
+func (l DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
+  return nil, nil
 }
 
 func main() {
@@ -41,7 +53,7 @@ func main() {
 			ReadTimeout:  5 * time.Minute,
 			WriteTimeout: 5 * time.Minute,
 		},
-		storage: &Dummy{},
+		lookup: NewLookup(DummyStorage{}),
 	}
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
