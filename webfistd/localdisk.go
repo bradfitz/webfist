@@ -136,6 +136,15 @@ func (s *diskStorage) EncryptedEmail(addrKey, encSHA1 string) ([]byte, error) {
 	return ioutil.ReadFile(path)
 }
 
+func (s *diskStorage) touchRecent(addrKey, encSHA1 string) error {
+	// Touch the recent file.
+	err := ioutil.WriteFile(filepath.Join(s.recentDir, addrKey+"-"+encSHA1+".recent"), nil, 0600)
+	if err == nil {
+		go s.cleanRecent()
+	}
+	return err
+}
+
 func (s *diskStorage) PutEncryptedEmail(addrKey, encSHA1 string, data []byte) error {
 	s1 := sha1.New()
 	s1.Write(data)
@@ -151,7 +160,7 @@ func (s *diskStorage) PutEncryptedEmail(addrKey, encSHA1 string, data []byte) er
 	if err := ioutil.WriteFile(emailPath, data, 0644); err != nil {
 		return err
 	}
-	return nil
+	return s.touchRecent(addrKey, encSHA1)
 }
 
 func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) error {
@@ -181,13 +190,7 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 	if err := ioutil.WriteFile(emailPath, enc, 0644); err != nil {
 		return err
 	}
-
-	// Touch the recent file.
-	err = ioutil.WriteFile(filepath.Join(s.recentDir, addrKey+"-"+encSHA1+".recent"), nil, 0600)
-	if err == nil {
-		go s.cleanRecent()
-	}
-	return err
+	return s.touchRecent(addrKey, encSHA1)
 }
 
 func (s *diskStorage) Emails(addr *webfist.EmailAddr) ([]*webfist.Email, error) {
