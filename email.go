@@ -47,6 +47,9 @@ func NewEmail(all []byte) (*Email, error) {
 // Verify returns whether
 func (e *Email) Verify() bool {
 	dkimVerifyOnce.Do(initDKIMVerify)
+	if e.msg.Header.Get("DKIM-Signature") == "" {
+		return false
+	}
 
 	cmd := exec.Command(dkimVerifyPath)
 	cmd.Stdin = bytes.NewReader(e.all)
