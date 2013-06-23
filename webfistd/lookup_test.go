@@ -16,7 +16,7 @@ func (DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
 	return nil
 }
 
-func (l DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
+func (l *DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
 	files := []string{
 		"gmail_dkim.txt",
 	}
@@ -34,6 +34,14 @@ func (l DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
 		res = append(res, e)
 	}
 	return res, nil
+}
+
+func (l *DummyStorage) StatEncryptedEmail(addrKey, encSHA1 string) (size int, err error) {
+	panic("Not implemented")
+}
+
+func (l *DummyStorage) EncryptedEmail(addrKey, sha1 string) ([]byte, error) {
+	panic("Not implemented")
 }
 
 var (
