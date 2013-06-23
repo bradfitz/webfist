@@ -36,14 +36,14 @@ func (s *server) Lookup(w http.ResponseWriter, r *http.Request) {
     http.NotFound(w, r)
     return
   }
-  b, err := json.Marshal(foundData.JSON)
+  b, err := json.Marshal(foundData)
   if err != nil {
     log.Printf("Bad data for resource: %s -- %v", emailLikeId, err)
     http.Error(w, "Bad data from lookup", http.StatusInternalServerError)
     return
   }
 
-  log.Printf("Found user %s -- %v", emailLikeId, foundData.JSON)
+  log.Printf("Found user %s -- %+v", emailLikeId, foundData)
   w.Write(b)
 }
 
@@ -52,10 +52,12 @@ type emailLookup struct {
 }
 
 func (l *emailLookup) WebFinger(emailAddr string) (*webfist.WebFingerResponse, error) {
-  resp := &webfist.WebFingerResponse{JSON: make(map[string]interface{})}
-  resp.JSON["hi"] = "meep";
+  resp := &webfist.WebFingerResponse{
+  	Subject: "foo@bar.com",
+  }
   email := webfist.NewEmailAddr(emailAddr)
   emailList, _ := l.storage.Emails(email)
+  // TODO: Make this actuall parse emails
   log.Printf("Email list: %v", emailList)
   return resp, nil
 }

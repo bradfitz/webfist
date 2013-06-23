@@ -7,10 +7,20 @@ type Storage interface {
 	Emails(*EmailAddr) ([]*Email, error)
 }
 
-// Payload from: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
-// TODO: Make this type pretty and more native, not just a bag of properties.
+// Defined in: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
+type Link struct {
+	Rel string `json:"rel"`
+	Type string `json:"type"`
+	Href string `json:"href"`
+	Titles []string `json:"titles,omitempty"`
+	Properties map[string]string `json:"properties,omitempty"`
+}
+
 type WebFingerResponse struct {
-  JSON map[string]interface{}
+	Subject string `json:"subject"`
+	Aliases []string `json:"aliases,omitempty"`
+	Properties map[string]string `json:"properties,omitempty"`
+	Links []Link `json:"links,omitempty"`
 }
 
 // Lookup performs a WebFinger query for an email address and returns all known
