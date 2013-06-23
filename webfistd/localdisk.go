@@ -2,10 +2,12 @@ package main
 
 import (
 	"crypto/sha1"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/bradfitz/webfist"
 )
@@ -20,9 +22,35 @@ func NewDiskStorage(root string) webfist.Storage {
 	}
 }
 
+func (s *diskStorage) hexPath(hex string) string {
+	return filepath.Join(s.root, hex[:3], hex[3:6], hex)
+}
+
 func (s *diskStorage) getEmailRoot(addr *webfist.EmailAddr) string {
-	x := addr.HexKey()
-	return filepath.Join(s.root, x[:3], x[3:6], x)
+	return s.hexPath(addr.HexKey())
+}
+
+var (
+	rxSHA1            = regexp.MustCompile(`^[0-9a-f]{40,40}$`)
+	errInvalidBlobref = errors.New("Invalid sha1")
+)
+
+func (s *diskStorage) StatEncryptedEmail(sha1 string) (size int, err error) {
+	if !rxSHA1.MatchString(sha1) {
+		return 0, errInvalidBlobref
+	}
+	fi, err := os.Stat(s.hexPath(sha1))
+	if err != nil {
+		return
+	}
+	return int(fi.Size()), nil
+}
+
+func (s *diskStorage) EncryptedEmail(sha1 string) ([]byte, error) {
+	if !rxSHA1.MatchString(sha1) {
+		return nil, errInvalidBlobref
+	}
+	return ioutil.ReadFile(s.hexPath(sha1))
 }
 
 func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) error {
