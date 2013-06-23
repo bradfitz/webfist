@@ -8,7 +8,10 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"flag"
 )
+
+var syncInterval = flag.Duration("sync_interval", 10 * time.Second, "Sync poll interval.")
 
 func (s *server) syncFromPeers() {
 	for _, peer := range s.peers {
@@ -28,7 +31,7 @@ func (srv *server) syncFromPeer(host string) {
 		if err != nil {
 			panic("Bogus host: " + host + ": " + err.Error())
 		}
-		sleep = 30 * time.Second
+		sleep = *syncInterval
 		res, err := http.DefaultClient.Do(req)
 		if err != nil {
 			log.Printf("Fetch error from %s: %v", host, err)
