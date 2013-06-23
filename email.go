@@ -73,7 +73,9 @@ var (
 )
 
 // Extracts WebFinger delegation assignments from the message body.
-func (e *Email) Assignments() map[string]string {
+// Returns an empty map if nothing is found. Returns an error if
+// there was something wrong with the email body's format.
+func (e *Email) Assignments() (map[string]string, error) {
 	assignments := make(map[string]string)
 	for _, match := range assignmentRe.FindAllSubmatch(e.body, -1) {
 		if len(match) != 2 {
@@ -83,7 +85,7 @@ func (e *Email) Assignments() map[string]string {
 		value := string(match[1])
 		assignments[key] = value
 	}
-	return assignments
+	return assignments, nil
 }
 
 var (

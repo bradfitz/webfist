@@ -7,7 +7,7 @@ import (
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
-	"github.com/bradfitz/webfist"
+	// "github.com/bradfitz/webfist"
 )
 
 var (
@@ -18,26 +18,11 @@ var (
 type server struct {
 	httpServer http.Server
 	smtpServer *smtpd.Server
-	lookup webfist.Lookup
 }
 
 func (s *server) runSMTP(ln net.Listener) {
 	err := s.smtpServer.Serve(ln)
 	log.Fatalf("SMTP failure: %v", err)
-}
-
-// TODO: Move this somewhere else
-type DummyStorage struct {}
-
-func (DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
-  return nil
-}
-
-func (l DummyStorage) Emails(*webfist.EmailAddr) (result []*webfist.Email, err error) {
-	result = make([]*webfist.Email, 1)
-	var myVar []byte = []byte("foo")
-	result[0], err = webfist.NewEmail(myVar)
-  return
 }
 
 func main() {
@@ -56,11 +41,16 @@ func main() {
 			ReadTimeout:  5 * time.Minute,
 			WriteTimeout: 5 * time.Minute,
 		},
-		lookup: NewLookup(DummyStorage{}),
 	}
+
+	// TODO: Actually hook up the lookup
+	// lookup := &lookupHandler {
+	// 	lookup: NewLookup(&DummyStorage{}),
+	// }
+	// http.Handle("/.well-known/webfinger", lookup)
+
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	http.HandleFunc("/.well-known/webfinger", srv.HandleLookup)
 	log.Fatal(srv.httpServer.Serve(webln))
 }
