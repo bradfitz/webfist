@@ -39,11 +39,10 @@ func main() {
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	// TODO: Actually hook up the lookup
-	// lookup := &lookupHandler {
-	// 	lookup: NewLookup(&DummyStorage{}),
-	// }
-	// http.Handle("/.well-known/webfinger", lookup)
+	lookup := &lookupHandler {
+		lookup: NewLookup(NewDiskStorage(*storageRoot)),
+	}
+	http.Handle("/.well-known/webfinger", lookup)
 
 	log.Fatal(srv.httpServer.Serve(webln))
 }
