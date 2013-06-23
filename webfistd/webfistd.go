@@ -3,9 +3,7 @@ package main
 import (
 	"flag"
 	"log"
-	"net"
 	"net/http"
-	"time"
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
@@ -22,11 +20,6 @@ type server struct {
 	smtpServer *smtpd.Server
 }
 
-func (s *server) runSMTP(ln net.Listener) {
-	err := s.smtpServer.Serve(ln)
-	log.Fatalf("SMTP failure: %v", err)
-}
-
 func main() {
 	flag.Parse()
 	webln, err := webAddr.Listen()
@@ -38,16 +31,12 @@ func main() {
 		log.Fatalf("SMTP listen: %v", err)
 	}
 
-	srv := &server{
-		smtpServer: &smtpd.Server{
-			ReadTimeout:  5 * time.Minute,
-			WriteTimeout: 5 * time.Minute,
-		},
-	}
+	var srv server
+	srv.initSMTPServer()
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	lookupServer := &webfist.Server {
+	lookupServer := &webfist.Server{
 		Lookup: &webfist.Dummy{},
 	}
 
