@@ -22,7 +22,8 @@ var (
 type server struct {
 	httpServer http.Server
 	smtpServer *smtpd.Server
-	lookup webfist.Lookup
+	lookup     webfist.Lookup
+	storage    webfist.Storage
 }
 
 func main() {
@@ -48,14 +49,17 @@ func main() {
 		}
 	}
 
+	storage := NewDiskStorage(*storageRoot)
 	srv := &server{
-		lookup: NewLookup(NewDiskStorage(*storageRoot)),
+		storage: storage,
+		lookup:  NewLookup(storage),
 	}
 	srv.initSMTPServer()
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
 	http.HandleFunc("/.well-known/webfinger", srv.Lookup)
+	http.HandleFunc("/add", srv.WebFormAdd)
 
 	log.Fatal(srv.httpServer.Serve(webln))
 }
