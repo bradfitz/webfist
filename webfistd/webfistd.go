@@ -60,6 +60,7 @@ func main() {
 	go srv.runSMTP(smtpln)
 
 	http.HandleFunc("/.well-known/webfinger", srv.Lookup)
+	http.HandleFunc("/webfist/proof/", srv.ServeBlob)
 	http.HandleFunc("/add", srv.WebFormAdd)
 
 	log.Fatal(srv.httpServer.Serve(webln))
