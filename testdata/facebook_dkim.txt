@@ -1,0 +1,77 @@
+Delivered-To: bradfitz@gmail.com
+Received: by 10.60.7.105 with SMTP id i9csp48710oea;
+        Fri, 21 Jun 2013 23:24:49 -0700 (PDT)
+X-Received: by 10.229.56.197 with SMTP id z5mr2051560qcg.22.1371882288874;
+        Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+Return-Path: <bradfitz@facebook.com>
+Received: from mail-qa0-x230.google.com (mail-qa0-x230.google.com [2607:f8b0:400d:c00::230])
+        by mx.google.com with ESMTPS id z10si3907351qal.115.2013.06.21.23.24.48
+        for <bradfitz@gmail.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+Received-SPF: fail (google.com: domain of bradfitz@facebook.com does not designate 2607:f8b0:400d:c00::230 as permitted sender) client-ip=2607:f8b0:400d:c00::230;
+Authentication-Results: mx.google.com;
+       spf=hardfail (google.com: domain of bradfitz@facebook.com does not designate 2607:f8b0:400d:c00::230 as permitted sender) smtp.mail=bradfitz@facebook.com;
+       dkim=pass header.i=@facebook.com;
+       dmarc=pass (p=REJECT dis=NONE) d=facebook.com
+Received: by mail-qa0-x230.google.com with SMTP id cm16so1143700qab.0
+        for <bradfitz@gmail.com>; Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=dkim-signature:date:from:to:message-id:in-reply-to:references
+         :subject:mime-version:content-type:delivered-to:x-gm-message-state;
+        bh=pdK6qXgdo9P/niPPLEsaYJJ0UZMt+JggYJ6sMOJ0quI=;
+        b=TwJ+BscsTyJ0Z9jf7K2yE143LoHO2czcmGiSd6+jiwIMKyWb8YbgSaRwPgFhUNGTB+
+         BjPkUD49/kRVhSsdP96//lIjplCvSkS2zFJwzYZ1NoYkwkP4z2qNUWScuv62JwO8HdjL
+         Yw3Dh9b8MVQCniWBeEiB7ZMkIudtWiMObFagNBMa0X/e62C87180Lm+YNlaQDJh7HKJM
+         HRw58CZq6dzJpAhhPmBDpSsjCbNT5egM8LQptsizhTmzbsC49ZbDsV27iKDDGvd/bKaw
+         kEZYv8eDkO1n5NVOKJyAV6nFgos4/DJW7KLwOCP0mUbmnTg86iqveIE1zDqGSAWhL3Pb
+         vaxA==
+X-Received: by 10.49.62.33 with SMTP id v1mr17825022qer.53.1371882288705;
+        Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+X-Received: by 10.49.62.33 with SMTP id v1mr17825005qer.53.1371882288419;
+        Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+Return-Path: <bradfitz@facebook.com>
+Received: from smtpout.mx.facebook.com (smtpout002.ash3.facebook.com. [69.171.244.65])
+        by mx.google.com with ESMTP id v1si4086958qef.127.2013.06.21.23.24.48
+        for <brad@danga.com>;
+        Fri, 21 Jun 2013 23:24:48 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bradfitz@facebook.com designates 69.171.244.65 as permitted sender) client-ip=69.171.244.65;
+Return-Path: <bradfitz@facebook.com>
+DKIM-Signature: v=1; a=rsa-sha256; d=facebook.com; s=s1024-2010-q3; c=relaxed/simple;
+                q=dns/txt; i=@facebook.com; t=1371882288;
+                h=From:Subject:X-:Date:To:MIME-Version:Content-Type;
+                bh=pdK6qXgdo9P/niPPLEsaYJJ0UZMt+JggYJ6sMOJ0quI=;
+                b=F851/bseXai+X0BMC5SmU5NMn4kK9ve4mhvJwNV6VSJNamQ79p05XfxS896kNocN
+                IZNqqZLC05l1K4/xJs6T9uOZz3AJFvGD2yz59bAOQ4bIMLrktDTFK0isGrlwsQ8o
+                LwrQKdYYVj2OgKdZspDIHnBXFcfqRhYmPVoM/c/SpGw=;
+Received: from [10.148.159.77] ([10.148.159.77:47870] helo=www.facebook.com)
+          by 10.148.128.25 (envelope-from <bradfitz@facebook.com>)
+          (ecelerity 2.2.3.50 r(45166/45167)) with ESMTP
+          id 81/33-20247-03345C15; Fri, 21 Jun 2013 23:24:48 -0700
+Date: Fri, 21 Jun 2013 23:24:48 -0700
+From: Brad Fitzpatrick <bradfitz@facebook.com>
+To: Brad Fitzpatrick <brad@danga.com>
+Message-ID: <51c54330.a118310a.1303.ffff960fSMTPIN_ADDED_BROKEN@mx.google.com>
+In-Reply-To: 
+References: 
+Subject: Conversation with Brad Fitzpatrick
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+              boundary="----=_Part_9281_171039419.1371882288111"
+Delivered-To: brad@danga.com
+X-Gm-Message-State: ALoCoQmWfUbsFcIQEz6qyk9oXakSYooJdEMV5v+e2UJG7uwYykVeqcc+ezNtCvHQfWV0+9SdWqCMZX8JJj2caoNNhnXphv5yaD1ZF+ar1lctA1I8C/gDv9g=
+
+------=_Part_9281_171039419.1371882288111
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+testing DKIM from facebook
+
+
+------=_Part_9281_171039419.1371882288111
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<div>testing DKIM from facebook<br/><br/></div>
+------=_Part_9281_171039419.1371882288111--
