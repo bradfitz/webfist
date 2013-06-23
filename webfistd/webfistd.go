@@ -31,15 +31,17 @@ func main() {
 		log.Fatalf("SMTP listen: %v", err)
 	}
 
-	var srv server
-	srv.initSMTPServer()
+	srv := &server{
+		smtpServer: &smtpd.Server{
+			ReadTimeout:  5 * time.Minute,
+			WriteTimeout: 5 * time.Minute,
+		},
+		storage: &Dummy{},
+	}
 	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
 	go srv.runSMTP(smtpln)
 
-	lookupServer := &webfist.Server{
-		Lookup: &webfist.Dummy{},
-	}
+	// http.HandleFunc("/.well-known/webfinger", srv.HandleLookup)
 
-	http.HandleFunc("/.well-known/webfinger", lookupServer.HandleLookup)
 	log.Fatal(srv.httpServer.Serve(webln))
 }
