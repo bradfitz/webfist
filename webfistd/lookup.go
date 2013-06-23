@@ -9,11 +9,7 @@ import (
   "github.com/bradfitz/webfist"
 )
 
-type lookupHandler struct {
-  lookup webfist.Lookup
-}
-
-func (h *lookupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (s *server) Lookup(w http.ResponseWriter, r *http.Request) {
   if r.ParseForm() != nil {
     http.Error(w, "Bad request", http.StatusBadRequest)
     return
@@ -29,7 +25,7 @@ func (h *lookupHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  foundData, err := h.lookup.WebFinger(emailLikeId)
+  foundData, err := s.lookup.WebFinger(emailLikeId)
   if err != nil {
     log.Printf("Error looking up resource: %s -- %v", emailLikeId, err)
     http.Error(w, "Error doing lookup", http.StatusInternalServerError)

@@ -47,6 +47,32 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 	return ioutil.WriteFile(emailPath, enc, 0644)
 }
 
-func (s *diskStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
-	panic("TODO")
+func (s *diskStorage) Emails(addr *webfist.EmailAddr) ([]*webfist.Email, error) {
+	emailRoot := s.getEmailRoot(addr)
+	file, err := os.Open(emailRoot)
+	if err != nil {
+		return nil, err
+	}
+	infoList, err := file.Readdir(-1)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*webfist.Email, len(infoList))
+	for i, info := range infoList {
+		emailPath := filepath.Join(emailRoot, info.Name())
+		file, err := os.Open(emailPath)
+		if err != nil {
+			return nil, err
+		}
+		all, err := ioutil.ReadAll(addr.Decrypter(file))
+		if err != nil {
+			return nil, err
+		}
+		email, err := webfist.NewEmail(all)
+		if err != nil {
+			return nil, err
+		}
+		result[i] = email
+	}
+	return result, nil
 }
