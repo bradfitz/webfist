@@ -49,7 +49,10 @@ func main() {
 		}
 	}
 
-	storage := NewDiskStorage(*storageRoot)
+	storage, err := NewDiskStorage(*storageRoot)
+	if err != nil {
+		log.Fatalf("Disk storage of %s: %v", *storageRoot, err)
+	}
 	srv := &server{
 		storage: storage,
 		lookup:  NewLookup(storage),

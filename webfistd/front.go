@@ -19,7 +19,7 @@ func front(w http.ResponseWriter, r *http.Request) {
 <textarea name='email' rows=20 cols=80></textarea><br/>
 <input type='submit' value='Submit' />
 </form>
-
+[<a href="/webfist/bump">Recent changes</a>]
 <center>
 <p><img width=561 height=798 src='http://upload.wikimedia.org/wikipedia/commons/1/17/Fist.png'></p>
 </center>
