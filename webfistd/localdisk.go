@@ -85,7 +85,10 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 
 	s1 := sha1.New()
 	s1.Write(enc)
-	emailPath := filepath.Join(emailRoot, fmt.Sprintf("%x", s1.Sum(nil)))
+	encSHA1 := fmt.Sprintf("%x", s1.Sum(nil))
+	email.SetEncSHA1(encSHA1)
+
+	emailPath := filepath.Join(emailRoot, encSHA1)
 	return ioutil.WriteFile(emailPath, enc, 0644)
 }
 

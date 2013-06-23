@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"sort"
@@ -93,13 +94,21 @@ func (l *emailLookup) WebFinger(addr string) (*webfist.WebFingerResponse, error)
 	if err != nil {
 		return nil, err
 	}
+	encSHA1, err := lastEmail.EncSHA1()
+	if err != nil {
+		return nil, err
+	}
+	proofURL := fmt.Sprintf("%s/webfist/proof/%s-%s", *baseURL, emailAddr.HexKey(), encSHA1)
 
 	resp := &webfist.WebFingerResponse {
 		Subject: emailAddr.Canonical(),
 		Links: []webfist.Link {
 			{
-				Rel: "webfist",
+				Rel: "http://webfist.org/spec/rel",
 				Href: url,
+				Properties: map[string]string {
+					"http://webfist.org/spec/proof": proofURL,
+				},
 			},
 		},
 	}
