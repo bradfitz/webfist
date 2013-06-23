@@ -1,4 +1,3 @@
-// Package webfist implements WebFist verification.
 package webfist
 
 import (
