@@ -3,6 +3,7 @@ package webfist
 import (
 	"bytes"
 	"errors"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/mail"
@@ -66,6 +67,20 @@ func (e *Email) From() (*EmailAddr, error) {
 		return nil, err
 	}
 	return NewEmailAddr(mailAddr.Address), nil
+}
+
+func (e *Email) Encrypted() (io.Reader, error) {
+	addr, err := e.From()
+	if err != nil {
+		return nil, err
+	}
+	pr, pw := io.Pipe()
+	ew := addr.Encrypter(pw)
+	go func() {
+		_, err := ew.Write(e.all)
+		pw.CloseWithError(err)
+	}()
+	return pr, nil
 }
 
 var (

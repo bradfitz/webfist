@@ -12,6 +12,7 @@ import (
 var (
 	webAddr  = listen.NewFlag("web", ":8080", "Web port")
 	smtpAddr = listen.NewFlag("smtp", ":2500", "SMTP port")
+	storageRoot = flag.String("root", "", "Root for local disk storage")
 )
 
 type server struct {
@@ -28,6 +29,9 @@ func main() {
 	smtpln, err := smtpAddr.Listen()
 	if err != nil {
 		log.Fatalf("SMTP listen: %v", err)
+	}
+	if *storageRoot == "" {
+		log.Fatalf("Storage root must be specified")
 	}
 
 	var srv server
