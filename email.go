@@ -86,24 +86,22 @@ func (e *Email) Encrypted() (io.Reader, error) {
 	return pr, nil
 }
 
+//webfist=http://example.com/myjrd.json
 var (
-	assignmentRe = regexp.MustCompile("([^ =]+)[ ]*=([ ]*[^ \n\r\t]+)")
+	assignmentRe = regexp.MustCompile(`\bwebfist\s*=\s*(\S+)`)
 )
 
-// Extracts WebFinger delegation assignments from the message body.
-// Returns an empty map if nothing is found. Returns an error if
-// there was something wrong with the email body's format.
-func (e *Email) Assignments() (map[string]string, error) {
-	assignments := make(map[string]string)
+// WebFist returns the delegation identifier parse from the email. The email
+// must contain a single assignment where the delegated WebFinger server lives.
+//   webfist = http://example.com/my-profile.json
+func (e *Email) WebFist() (string, error) {
 	for _, match := range assignmentRe.FindAllSubmatch(e.body, -1) {
 		if len(match) != 2 {
 			continue
 		}
-		key := string(match[0])
-		value := string(match[1])
-		assignments[key] = value
+		return string(match[1]), nil
 	}
-	return assignments, nil
+	return "", errors.New("'webfist' assignment missing")
 }
 
 var (

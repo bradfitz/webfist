@@ -1,49 +1,80 @@
-Delivered-To: bslatkin@google.com
-Received: by 10.194.171.169 with SMTP id av9csp95301wjc;
-        Sat, 22 Jun 2013 10:45:00 -0700 (PDT)
-X-Received: by 10.52.94.142 with SMTP id dc14mr7066455vdb.86.1371923099705;
-        Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+Delivered-To: bradfitz@gmail.com
+Received: by 10.60.7.105 with SMTP id i9csp120407oea;
+        Sun, 23 Jun 2013 12:54:08 -0700 (PDT)
+X-Received: by 10.180.11.146 with SMTP id q18mr4162877wib.50.1372017247550;
+        Sun, 23 Jun 2013 12:54:07 -0700 (PDT)
 Return-Path: <bslatkin@gmail.com>
-Received: from mail-ve0-x22a.google.com (mail-ve0-x22a.google.com [2607:f8b0:400c:c01::22a])
-        by mx.google.com with ESMTPS id kr7si3038551vec.75.2013.06.22.10.44.59
-        for <bslatkin@google.com>
+Received: from mail-ve0-x232.google.com (mail-ve0-x232.google.com [2607:f8b0:400c:c01::232])
+        by mx.google.com with ESMTPS id wm3si5091471wjc.53.2013.06.23.12.54.06
+        for <bradfitz@gmail.com>
         (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-        Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
-Received-SPF: pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::22a as permitted sender) client-ip=2607:f8b0:400c:c01::22a;
+        Sun, 23 Jun 2013 12:54:07 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::232 as permitted sender) client-ip=2607:f8b0:400c:c01::232;
 Authentication-Results: mx.google.com;
-       spf=pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::22a as permitted sender) smtp.mail=bslatkin@gmail.com;
+       spf=pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::232 as permitted sender) smtp.mail=bslatkin@gmail.com;
        dkim=pass header.i=@gmail.com
-Received: by mail-ve0-x22a.google.com with SMTP id 14so7519778vea.1
-        for <bslatkin@google.com>; Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
+Received: by mail-ve0-x232.google.com with SMTP id pb11so8140794veb.9
+        for <bradfitz@gmail.com>; Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20120113;
+        h=dkim-signature:mime-version:date:message-id:subject:from:to
+         :content-type:delivered-to:x-gm-message-state;
+        bh=CZnsNv0b4VreQhSqIaKaPPbnHlllv0UQlqvG8YKbXgU=;
+        b=Fi9EPk/AC3Ojkq/aWMqPvu+WZ57QJv4dvef/WFrVubYjaJjckcv35MOvVao+k3uDLf
+         A5PbfAvKCHUIlTe13NfHirQBbfdylsqGIMPy8/CdcSPJU3+5yaHAXx3b0ZVWFH4dsfmx
+         xU0rdtPRncVAfnKVG4HlelanQQZZ6AHMPDD8gHe9vqmoaLnYkX7TbhIrnvzNO8e8m2wE
+         +6F68/peYt2ERGL7MX7hqgW/Y6xRENZVXs7YBR/ifq/tK4qIfAO7y1GU9Ib2zB0iNYe3
+         quz6oNJxj9CNrIU8BG7E7otYnsxbxws5ITHn79Bad8fV3Dg6BwjI1sYX+5p+nRUneKs8
+         MC3g==
+X-Received: by 10.52.92.135 with SMTP id cm7mr8399923vdb.36.1372017246848;
+        Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+X-Received: by 10.52.92.135 with SMTP id cm7mr8399918vdb.36.1372017246524;
+        Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+Return-Path: <bslatkin@gmail.com>
+Received: from mail-ve0-x22c.google.com (mail-ve0-x22c.google.com [2607:f8b0:400c:c01::22c])
+        by mx.google.com with ESMTPS id n7si4160348vcj.5.2013.06.23.12.54.06
+        for <brad@danga.com>
+        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+        Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+Received-SPF: pass (google.com: domain of bslatkin@gmail.com designates 2607:f8b0:400c:c01::22c as permitted sender) client-ip=2607:f8b0:400c:c01::22c;
+Received: by mail-ve0-f172.google.com with SMTP id jz10so8076107veb.31
+        for <brad@danga.com>; Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20120113;
         h=mime-version:date:message-id:subject:from:to:content-type;
-        bh=73w7+sBlruX35di0wIGpacabgZC/OTSEgWKF+e0iz3o=;
-        b=DXRVj+DwUtaJleY+Z7NUl70+nP3SAptZS8VHCxWEnuK2VmhVZZwT7F7UrfpuKmAm+i
-         /GNHHzs6XXodu7CVmRfIjM3QAlxZgnI9kwbROgITdO/VZsXdoBI0icnSciNMtwsdeGja
-         ZzdOyLNiWKYFl1fzkZYMDEoi+8ZOQOrZ4i0Eg1+0XnOyNMpw+GEm1b3CxrysJPmFryzp
-         qhoSjm21E9csgQJGyeR9Vb4z0BouKUIhfAR50KQlxvQ7pW+fP4qpbBEgjC6xOiXVrHVX
-         ldJoVy0eJCKRTOrvmlu8AHXJl/OMxKDZNy+1bUWj/8usDNO6rgrsiL/e0GmQ5cI7QtcN
-         5WAA==
+        bh=CZnsNv0b4VreQhSqIaKaPPbnHlllv0UQlqvG8YKbXgU=;
+        b=fSH2BsAr4Aiq9c4U7SzlZqHEm1xhJwqwXavkJWJOtJwba338WvGVOHwyVn9OF1sXwE
+         e4RyCmqg4PkTDcqn43FbkXHiWX4VaN3D74IhW0Dht8CeX3tfmJhAYYk+FBUsCA1LBy/k
+         iwb3AAoSq9a4uqShb05I1HhmiJ6d8QYOla+9ynVvNgXW2XArtsA8/D/h/z3CLZ+Vz2+7
+         nd4IFgAF16UZsTPjre9Rnv6xcg3YPYToCAntKg0usVwjpBRm3k2ag2JXjgycZEmcLnQb
+         OvbC8E/C0ie+U5oyd7kyz0RCG4tjV+KedX1a58lLrH2LnOLL3pdEOQAI6mHS1P1anjaA
+         3jdA==
 MIME-Version: 1.0
-X-Received: by 10.58.85.134 with SMTP id h6mr8210008vez.18.1371923099288; Sat,
- 22 Jun 2013 10:44:59 -0700 (PDT)
-Received: by 10.58.251.136 with HTTP; Sat, 22 Jun 2013 10:44:59 -0700 (PDT)
-Date: Sat, 22 Jun 2013 10:44:59 -0700
-Message-ID: <CAHi+7OBkCMXVnDek1ZaznyggOd2fp=GKe-oaj-RT7RbRRm7oRA@mail.gmail.com>
-Subject: Testing for the DKIM
+X-Received: by 10.58.235.69 with SMTP id uk5mr10086631vec.17.1372017246038;
+ Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+Received: by 10.58.251.136 with HTTP; Sun, 23 Jun 2013 12:54:06 -0700 (PDT)
+Date: Sun, 23 Jun 2013 12:54:06 -0700
+Message-ID: <CAHi+7OCpufnP_kBPE5TEByxvBwdgrpZvk8OEtTTpUOjcOSxOaw@mail.gmail.com>
+Subject: Testing this
 From: Brett Slatkin <bslatkin@gmail.com>
-To: Brett Slatkin <bslatkin@google.com>
-Content-Type: multipart/alternative; boundary=047d7b6d9340fe0dd104dfc1bc74
+To: Brad Fitzpatrick <brad@danga.com>
+Content-Type: multipart/alternative; boundary=047d7bd6c2c49372d204dfd7a867
+Delivered-To: brad@danga.com
+X-Gm-Message-State: ALoCoQlZDQw6ep0Z9Zm5hOrpnhJeDkvvRT93fWL2DDAHLu7OdN1trS+4VZ/2vmahlh0wt//VqSn5fRqaFUB2i9J5Ol91xaDqK2ev3DwZhZMluZVZTk8mv6w=
 
---047d7b6d9340fe0dd104dfc1bc74
+--047d7bd6c2c49372d204dfd7a867
 Content-Type: text/plain; charset=ISO-8859-1
 
+webfist = http://www.example.com/foo/bar/baz.json
 
-
---047d7b6d9340fe0dd104dfc1bc74
+--047d7bd6c2c49372d204dfd7a867
 Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-<div dir="ltr"><br></div>
+<div dir=3D"ltr"><span style=3D"font-family:arial,sans-serif;font-size:13px=
+">webfist =3D=A0</span><a href=3D"http://www.example.com/foo/bar/baz.json" =
+target=3D"_blank" style=3D"font-family:arial,sans-serif;font-size:13px">htt=
+p://www.example.com/foo/bar/baz.json</a><br>
+</div>
 
---047d7b6d9340fe0dd104dfc1bc74--
+--047d7bd6c2c49372d204dfd7a867--

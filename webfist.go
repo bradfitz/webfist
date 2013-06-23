@@ -10,7 +10,7 @@ type Storage interface {
 // Defined in: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
 type Link struct {
 	Rel string `json:"rel"`
-	Type string `json:"type"`
+	Type string `json:"type,omitempty"`
 	Href string `json:"href"`
 	Titles []string `json:"titles,omitempty"`
 	Properties map[string]string `json:"properties,omitempty"`
@@ -28,5 +28,5 @@ type WebFingerResponse struct {
 // the network, fallback to using the WebFist network, or use local storage to
 // map email address to WebFinger response.
 type Lookup interface {
-  WebFinger(emailAddr string) (*WebFingerResponse, error)
+	WebFinger(string) (*WebFingerResponse, error)
 }
