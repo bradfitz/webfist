@@ -1,8 +1,10 @@
 package main
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"testing"
 
 	"github.com/bradfitz/webfist"
@@ -14,11 +16,24 @@ func (DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
 	return nil
 }
 
-func (l DummyStorage) Emails(*webfist.EmailAddr) (result []*webfist.Email, err error) {
-	result = make([]*webfist.Email, 1)
-	var myVar []byte = []byte("foo")
-	result[0], err = webfist.NewEmail(myVar)
-	return
+func (l DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
+	files := []string{
+		"gmail_dkim.txt",
+	}
+	var res []*webfist.Email
+	for _, file := range files {
+		full := filepath.Join("../testdata", file)
+		all, err := ioutil.ReadFile(full)
+		if err != nil {
+			return nil, err
+		}
+		e, err := webfist.NewEmail(all)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, e)
+	}
+	return res, nil
 }
 
 var (
@@ -38,7 +53,7 @@ func TestEmailLookup(t *testing.T) {
 	resp := httptest.NewRecorder()
 	testServer.Lookup(resp, req)
 	body := resp.Body.String()
-	wants := `{"subject":"foo@bar.com"}`
+	wants := `{"subject":"myname@example.com","links":[{"rel":"webfist","href":"http://www.example.com/foo/bar/baz.json"}]}`
 	if body != wants {
 		t.Fatalf("Body = %q; want %q", body, wants)
 	}
