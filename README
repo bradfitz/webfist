@@ -21,3 +21,6 @@ The plan is to have a big pool of WebFist servers, like NTP pools.
 
 Written by Brad Fitzpatrick and Brett Slatkin at IndieWebCamp in
 Portland on 2013-06-23.
+
+STATUS: quick hack, made while racing against demo time. It works, but
+could use some polish.
