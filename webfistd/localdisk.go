@@ -142,7 +142,12 @@ func (s *diskStorage) PutEncryptedEmail(addrKey, encSHA1 string, data []byte) er
 	if fmt.Sprintf("%x", s1.Sum(nil)) != encSHA1 {
 		return errInvalidBlobref
 	}
-	emailPath := filepath.Join(s.emailRootFromHex(addrKey), encSHA1)
+	emailRoot := s.emailRootFromHex(addrKey)
+	err := os.MkdirAll(emailRoot, 0755)
+	if err != nil {
+		return err
+	}
+	emailPath := filepath.Join(emailRoot, encSHA1)
 	if err := ioutil.WriteFile(emailPath, data, 0644); err != nil {
 		return err
 	}
