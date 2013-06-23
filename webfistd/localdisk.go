@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"crypto/sha1"
 	"errors"
 	"fmt"
@@ -8,19 +9,87 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 
 	"github.com/bradfitz/webfist"
 )
 
+const recentCount = 1000
+
 type diskStorage struct {
-	root string
+	root      string
+	recentDir string
 }
 
-func NewDiskStorage(root string) webfist.Storage {
-	return &diskStorage{
+func NewDiskStorage(root string) (webfist.Storage, error) {
+	ds := &diskStorage{
 		root: root,
 	}
+	ds.recentDir = filepath.Join(root, "recent")
+	if err := os.MkdirAll(ds.recentDir, 0700); err != nil {
+		return nil, err
+	}
+	go ds.cleanRecent()
+	return ds, nil
 }
+
+func (s *diskStorage) RecentMeta() (rm []*webfist.RecentMeta, err error) {
+	f, err := os.Open(s.recentDir)
+	if err != nil {
+		return
+	}
+	defer f.Close()
+	fis, err := f.Readdir(-1)
+	if err != nil {
+		return
+	}
+	sort.Sort(byModTime(fis))
+	for _, fi := range fis {
+		name := fi.Name()
+		if !strings.HasSuffix(name, ".recent") {
+			continue
+		}
+		name = strings.TrimSuffix(name, ".recent")
+		s := strings.SplitN(name, "-", 2)
+		if len(s) != 2 {
+			continue
+		}
+		rm = append(rm, &webfist.RecentMeta{
+			AddrHexKey: s[0],
+			EncSHA1:    s[1],
+			AddTime:    fi.ModTime(),
+		})
+	}
+	return rm, nil
+}
+
+func (s *diskStorage) cleanRecent() error {
+	f, err := os.Open(s.recentDir)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	fis, err := f.Readdir(-1)
+	if err != nil {
+		return err
+	}
+	if len(fis) <= recentCount {
+		return nil
+	}
+	sort.Sort(byModTime(fis))
+	toDelete := fis[:len(fis)-recentCount]
+	for _, fi := range toDelete {
+		path := filepath.Join(s.recentDir, filepath.Base(fi.Name()))
+		os.Remove(path)
+	}
+	return nil
+}
+
+type byModTime []os.FileInfo
+
+func (s byModTime) Len() int           { return len(s) }
+func (s byModTime) Swap(i, j int)      { s[i], s[j] = s[j], s[i] }
+func (s byModTime) Less(i, j int) bool { return s[i].ModTime().Before(s[j].ModTime()) }
 
 func (s *diskStorage) emailRootFromHex(addrHexKey string) string {
 	x := addrHexKey
@@ -85,11 +154,22 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 
 	s1 := sha1.New()
 	s1.Write(enc)
+
+	addrKey := addr.HexKey()
 	encSHA1 := fmt.Sprintf("%x", s1.Sum(nil))
 	email.SetEncSHA1(encSHA1)
 
 	emailPath := filepath.Join(emailRoot, encSHA1)
-	return ioutil.WriteFile(emailPath, enc, 0644)
+	if err := ioutil.WriteFile(emailPath, enc, 0644); err != nil {
+		return err
+	}
+
+	// Touch the recent file.
+	err = ioutil.WriteFile(filepath.Join(s.recentDir, addrKey+"-"+encSHA1+".recent"), nil, 0600)
+	if err == nil {
+		go s.cleanRecent()
+	}
+	return err
 }
 
 func (s *diskStorage) Emails(addr *webfist.EmailAddr) ([]*webfist.Email, error) {

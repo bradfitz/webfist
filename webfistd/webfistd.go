@@ -50,7 +50,10 @@ func main() {
 		}
 	}
 
-	storage := NewDiskStorage(*storageRoot)
+	storage, err := NewDiskStorage(*storageRoot)
+	if err != nil {
+		log.Fatalf("Disk storage of %s: %v", *storageRoot, err)
+	}
 	srv := &server{
 		storage: storage,
 		lookup:  NewLookup(storage),
@@ -60,6 +63,7 @@ func main() {
 	go srv.runSMTP(smtpln)
 
 	http.HandleFunc("/.well-known/webfinger", srv.Lookup)
+	http.HandleFunc("/webfist/bump", srv.ServeRecent)
 	http.HandleFunc("/webfist/proof/", srv.ServeBlob)
 	http.HandleFunc("/add", srv.WebFormAdd)
 

@@ -1,6 +1,10 @@
 // Package webfist implements WebFist.
 package webfist
 
+import (
+	"time"
+)
+
 // Storage is the interface implemented by backends.
 type Storage interface {
 	PutEmail(*EmailAddr, *Email) error
@@ -18,6 +22,16 @@ type Storage interface {
 	// email). Both are lowercase hex.  The err will be
 	// os.ErrNotExist if the file is doesn't exist.
 	EncryptedEmail(addrKey, sha1 string) ([]byte, error)
+
+	// RecentMeta returns the recently-received encrypted emails.
+	RecentMeta() ([]*RecentMeta, error)
+}
+
+// RecentMeta describes an encrypted email in the storage system.
+type RecentMeta struct {
+	AddrHexKey string
+	EncSHA1    string
+	AddTime    time.Time
 }
 
 // Defined in: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger

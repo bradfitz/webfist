@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/bradfitz/webfist"
 )
@@ -13,6 +14,7 @@ func (s *server) WebFormAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	all := r.FormValue("email")
+	all = strings.TrimLeft(all, " \t\n\r")
    	em, err := webfist.NewEmail([]byte(all))
 	if err != nil {
 		http.Error(w, "Bogus email: " + err.Error(), 400)
