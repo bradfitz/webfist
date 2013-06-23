@@ -22,39 +22,53 @@ func NewDiskStorage(root string) webfist.Storage {
 	}
 }
 
-func (s *diskStorage) hexPath(hex string) string {
-	return filepath.Join(s.root, hex[:3], hex[3:6], hex)
+func (s *diskStorage) emailRootFromHex(addrHexKey string) string {
+	x := addrHexKey
+	if len(x) < 7 {
+		panic("bogus emailRootFromHex")
+	}
+	return filepath.Join(s.root, x[:3], x[3:6], x)
 }
 
-func (s *diskStorage) getEmailRoot(addr *webfist.EmailAddr) string {
-	return s.hexPath(addr.HexKey())
+func (s *diskStorage) emailRoot(addr *webfist.EmailAddr) string {
+	return s.emailRootFromHex(addr.HexKey())
 }
 
 var (
+	rxAddrKey         = regexp.MustCompile(`^[0-9a-f]{7,}$`)
 	rxSHA1            = regexp.MustCompile(`^[0-9a-f]{40,40}$`)
 	errInvalidBlobref = errors.New("Invalid sha1")
 )
 
-func (s *diskStorage) StatEncryptedEmail(sha1 string) (size int, err error) {
-	if !rxSHA1.MatchString(sha1) {
-		return 0, errInvalidBlobref
+func (s *diskStorage) encFile(addrKey, encSHA1 string) (string, error) {
+	if !rxAddrKey.MatchString(addrKey) || !rxSHA1.MatchString(encSHA1) {
+		return "", errInvalidBlobref
 	}
-	fi, err := os.Stat(s.hexPath(sha1))
+	return filepath.Join(s.emailRootFromHex(addrKey), encSHA1), nil
+}
+
+func (s *diskStorage) StatEncryptedEmail(addrKey, encSHA1 string) (size int, err error) {
+	path, err := s.encFile(addrKey, encSHA1)
+	if err != nil {
+		return
+	}
+	fi, err := os.Stat(path)
 	if err != nil {
 		return
 	}
 	return int(fi.Size()), nil
 }
 
-func (s *diskStorage) EncryptedEmail(sha1 string) ([]byte, error) {
-	if !rxSHA1.MatchString(sha1) {
-		return nil, errInvalidBlobref
+func (s *diskStorage) EncryptedEmail(addrKey, encSHA1 string) ([]byte, error) {
+	path, err := s.encFile(addrKey, encSHA1)
+	if err != nil {
+		return nil, err
 	}
-	return ioutil.ReadFile(s.hexPath(sha1))
+	return ioutil.ReadFile(path)
 }
 
 func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) error {
-	emailRoot := s.getEmailRoot(addr)
+	emailRoot := s.emailRoot(addr)
 	err := os.MkdirAll(emailRoot, 0755)
 	if err != nil {
 		return err
@@ -76,7 +90,7 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 }
 
 func (s *diskStorage) Emails(addr *webfist.EmailAddr) ([]*webfist.Email, error) {
-	emailRoot := s.getEmailRoot(addr)
+	emailRoot := s.emailRoot(addr)
 	file, err := os.Open(emailRoot)
 	if err != nil {
 		return nil, err
