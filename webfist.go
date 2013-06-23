@@ -7,12 +7,12 @@ type Storage interface {
 	Emails(*EmailAddr) ([]*Email, error)
 }
 
-// Payload from: tools.ietf.org/html/draft-ietf-appsawg-webfinger-14‎
+// Payload from: http://tools.ietf.org/html/draft-ietf-appsawg-webfinger
 // TODO: Consider restricting to only delegation to another WebFinger server.
 type WebFingerResponse struct {
   JSON map[string]interface{}
 }
 
 type Lookup interface {
-  WebFinger(emailAddr *EmailAddr) *WebFingerResponse
+  WebFinger(emailAddr string) (*WebFingerResponse, error)
 }

@@ -29,12 +29,15 @@ func (s *server) runSMTP(ln net.Listener) {
 // TODO: Move this somewhere else
 type DummyStorage struct {}
 
-func (l DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
+func (DummyStorage) PutEmail(*webfist.EmailAddr, *webfist.Email) error {
   return nil
 }
 
-func (l DummyStorage) Emails(*webfist.EmailAddr) ([]*webfist.Email, error) {
-  return nil, nil
+func (l DummyStorage) Emails(*webfist.EmailAddr) (result []*webfist.Email, err error) {
+	result = make([]*webfist.Email, 1)
+	var myVar []byte = []byte("foo")
+	result[0], err = webfist.NewEmail(myVar)
+  return
 }
 
 func main() {

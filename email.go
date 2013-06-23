@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/mail"
 	"os/exec"
+	"regexp"
 	"strings"
 	"sync"
 )
@@ -36,6 +37,8 @@ func NewEmail(all []byte) (*Email, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO: Extract the message receive time for sorting purposes
 	e := &Email{
 		all:  all,
 		msg:  msg,
@@ -63,6 +66,24 @@ func (e *Email) From() (*EmailAddr, error) {
 		return nil, err
 	}
 	return NewEmailAddr(mailAddr.Address), nil
+}
+
+var (
+	assignmentRe = regexp.MustCompile("([^ =]+)[ ]*=([ ]*[^ \n\r\t]+)")
+)
+
+// Extracts WebFinger delegation assignments from the message body.
+func (e *Email) Assignments() map[string]string {
+	assignments := make(map[string]string)
+	for _, match := range assignmentRe.FindAllSubmatch(e.body, -1) {
+		if len(match) != 2 {
+			continue
+		}
+		key := string(match[0])
+		value := string(match[1])
+		assignments[key] = value
+	}
+	return assignments
 }
 
 var (

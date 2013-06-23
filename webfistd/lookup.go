@@ -25,21 +25,25 @@ func (s *server) HandleLookup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  emailAddr := webfist.NewEmailAddr(resource)
-  foundData := s.lookup.WebFinger(emailAddr)
+  foundData, err := s.lookup.WebFinger(emailLikeId)
+  if err != nil {
+    log.Printf("Error looking up resource: %s -- %v", emailLikeId, err)
+    http.Error(w, "Error doing lookup", http.StatusInternalServerError)
+    return
+  }
   if foundData == nil {
-    log.Printf("Not found: %s", emailAddr.Canonical())
+    log.Printf("Not found: %s", emailLikeId)
     http.NotFound(w, r)
     return
   }
   b, err := json.Marshal(foundData.JSON)
   if err != nil {
-    log.Printf("Bad data for resource: %s -- %v", emailAddr.Canonical(), err)
-    http.Error(w, "Bad data", http.StatusInternalServerError)
+    log.Printf("Bad data for resource: %s -- %v", emailLikeId, err)
+    http.Error(w, "Bad data from lookup", http.StatusInternalServerError)
     return
   }
 
-  log.Printf("Found user %s -- %v", emailAddr.Canonical(), foundData.JSON)
+  log.Printf("Found user %s -- %v", emailLikeId, foundData.JSON)
   w.Write(b)
 }
 
@@ -47,10 +51,13 @@ type emailLookup struct {
   storage webfist.Storage
 }
 
-func (l *emailLookup) WebFinger(emailAddr *webfist.EmailAddr) *webfist.WebFingerResponse {
+func (l *emailLookup) WebFinger(emailAddr string) (*webfist.WebFingerResponse, error) {
   resp := &webfist.WebFingerResponse{JSON: make(map[string]interface{})}
   resp.JSON["hi"] = "meep";
-  return resp;
+  email := webfist.NewEmailAddr(emailAddr)
+  emailList, _ := l.storage.Emails(email)
+  log.Printf("Email list: %v", emailList)
+  return resp, nil
 }
 
 func NewLookup(storage webfist.Storage) webfist.Lookup {
