@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/bradfitz/go-smtpd/smtpd"
 	"github.com/bradfitz/runsit/listen"
@@ -31,21 +30,16 @@ func main() {
 		log.Fatalf("SMTP listen: %v", err)
 	}
 
-	srv := &server{
-		smtpServer: &smtpd.Server{
-			ReadTimeout:  5 * time.Minute,
-			WriteTimeout: 5 * time.Minute,
-		},
-	}
+	var srv server
+	srv.initSMTPServer()
+	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
+	go srv.runSMTP(smtpln)
 
 	// TODO: Actually hook up the lookup
 	// lookup := &lookupHandler {
 	// 	lookup: NewLookup(&DummyStorage{}),
 	// }
 	// http.Handle("/.well-known/webfinger", lookup)
-
-	log.Printf("Server up. web %s, smtp %s", webAddr, smtpAddr)
-	go srv.runSMTP(smtpln)
 
 	log.Fatal(srv.httpServer.Serve(webln))
 }
