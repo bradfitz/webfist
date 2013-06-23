@@ -1,6 +1,8 @@
 // Package webfist implements WebFist.
 package webfist
 
+// Payload from: tools.ietf.org/html/draft-ietf-appsawg-webfinger-14‎
+// TODO: Consider restricting to only delegation to another WebFinger server.
 type WebFingerResponse struct {
   JSON map[string]interface{}
 }
