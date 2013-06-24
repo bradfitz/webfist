@@ -33,6 +33,11 @@ var (
 	fistSalt = []byte("WebFist salt.")
 )
 
+var keyCache struct {
+	sync.Mutex
+	m map[string][]byte
+}
+
 // EmailAddr provides utility functions on a wrapped email address.
 type EmailAddr struct {
 	email string // canonical
@@ -66,11 +71,29 @@ func (e *EmailAddr) getKey() []byte {
 }
 
 func (e *EmailAddr) initLazyKey() {
-	key, err := scrypt.Key([]byte(e.Canonical()), fistSalt, 16384*8, 8, 1, 32)
+	emailKey := e.Canonical()
+	keyCache.Lock()
+	v, ok := keyCache.m[emailKey]
+	keyCache.Unlock()
+
+	if ok {
+		e.lazyKey = v
+		return
+	}
+
+	key, err := scrypt.Key([]byte(emailKey), fistSalt, 16384*8, 8, 1, 32)
 	if err != nil {
 		panic(err)
 	}
 	e.lazyKey = key
+
+	keyCache.Lock()
+	if keyCache.m == nil {
+		keyCache.m = make(map[string][]byte)
+	}
+	keyCache.m[emailKey] = key
+	// TODO: Prune the cache
+	keyCache.Unlock()
 }
 
 func (e *EmailAddr) block() cipher.Block {
