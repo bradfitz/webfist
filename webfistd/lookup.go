@@ -52,7 +52,7 @@ func (s *server) Lookup(w http.ResponseWriter, r *http.Request) {
 	}
 	if foundData == nil {
 		log.Printf("Not found: %s", emailLikeId)
-		http.NotFound(w, r)
+		http.Error(w, "No WebFist data found for that resource", 404)
 		return
 	}
 	b, err := json.Marshal(foundData)

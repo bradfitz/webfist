@@ -212,6 +212,9 @@ func (s *diskStorage) PutEmail(addr *webfist.EmailAddr, email *webfist.Email) er
 func (s *diskStorage) Emails(addr *webfist.EmailAddr) ([]*webfist.Email, error) {
 	emailRoot := s.emailRoot(addr)
 	file, err := os.Open(emailRoot)
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, err
 	}
