@@ -59,7 +59,7 @@ func front(w http.ResponseWriter, r *http.Request) {
 <body>
 <div class="container">
 <h1>WebFist!</h1>
-<p>This is a WebFist server. See the source at <a
+<p>This is a WebFist server. See the <a href="http://www.onebigfluke.com/2013/06/bootstrapping-webfinger-with-webfist.html">introduction &amp; overview blog post</a> and the source at <a
 href="https://github.com/bradfitz/webfist">github.com/bradfitz/webfist</a>. You
 can run your own WebFist server and join the fist-bump network. Use WebFist
 servers to do WebFinger look-ups when the canonical reply (from the domain that
