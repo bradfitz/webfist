@@ -63,7 +63,8 @@ func (s *server) Lookup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("Found user %s -- %+v", emailLikeId, foundData)
-	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Write(b)
 }
 

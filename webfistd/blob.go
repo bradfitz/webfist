@@ -64,6 +64,7 @@ func (s *server) ServeBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Add("Content-Type", "text/plain")
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Write(decrypted)
 }

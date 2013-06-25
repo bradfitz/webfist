@@ -37,6 +37,7 @@ func (s *server) ServeRecent(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprintf(&buf, "%s %s-%s\n", m.AddTime.Format(time.RFC3339), m.AddrHexKey, m.EncSHA1)
 	}
+	w.Header().Add("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	http.ServeContent(w, r, "", max, bytes.NewReader(buf.Bytes()))
 }
